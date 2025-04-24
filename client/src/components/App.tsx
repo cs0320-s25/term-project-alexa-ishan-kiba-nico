@@ -9,17 +9,15 @@ function App() {
           <button className="leaderboard-button">Leaderboard</button>
         </SignedIn>
         <h1 aria-label='Quiz Whiz Header'>Quiz Whiz</h1>
-        <div className='Auth-buttons'>
-          <SignedOut>
-            <SignInButton />
-          </SignedOut>
-          <SignedIn>
-            <div className="user-button-wrapper">
-              <UserButton />
-            </div>
-          </SignedIn>
-        </div>
+        <SignedIn>
+          <div className="user-button-wrapper">
+            <UserButton />
+          </div>
+        </SignedIn>
       </div>
+      <SignedOut>
+        <SignInButton />
+      </SignedOut>
     </div>
   )
 }
