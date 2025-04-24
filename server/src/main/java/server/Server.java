@@ -2,8 +2,11 @@ package server;
 
 import static spark.Spark.after;
 
-import handlers.LeaderBoardHandler;
+import handlers.LeaderboardHandler;
+import java.io.IOException;
 import spark.Spark;
+import storage.FirebaseUtilities;
+import storage.StorageInterface;
 
 /**
  * Class to initialize the server that starts Spark and runs various handlers.
@@ -16,6 +19,7 @@ public class Server {
    * Constructor to build a server that starts Spark and runs various handlers.
    */
   public Server() {
+    StorageInterface firebaseUtils;
     Spark.port(port);
 
     after(
@@ -24,12 +28,20 @@ public class Server {
           response.header("Access-Control-Allow-Methods", "*");
         });
 
-    Spark.get("/leaderboard", new LeaderBoardHandler());
-    Spark.init();
-    Spark.awaitInitialization();
+    try {
+      firebaseUtils = new FirebaseUtilities();
 
-    // Server started at http://localhost:3232)
-    System.out.println("Server started");
+      Spark.get("/leaderboard", new LeaderboardHandler(firebaseUtils));
+      Spark.init();
+      Spark.awaitInitialization();
+
+      // Server started at http://localhost:3232)
+      System.out.println("Server started");
+    } catch (IOException e) {
+      System.err.println(
+          "Error: Could not initialize Firebase. Likely due to firebase_config.json not being found. Exiting.");
+      System.exit(1);
+    }
   }
 
   /**

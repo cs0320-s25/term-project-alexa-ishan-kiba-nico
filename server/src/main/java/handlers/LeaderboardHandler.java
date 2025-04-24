@@ -9,10 +9,13 @@ import java.util.Map;
 import spark.Request;
 import spark.Response;
 import spark.Route;
+import storage.StorageInterface;
 
-public class LeaderBoardHandler implements Route {
+public class LeaderboardHandler implements Route {
 
-  public LeaderBoardHandler() {}
+  public StorageInterface storageHandler;
+
+  public LeaderboardHandler(StorageInterface storageHandler) {this.storageHandler = storageHandler;}
 
   @Override
   public Object handle(Request request, Response response) {
