@@ -3,9 +3,7 @@ export function Dashboard() {
 
     return (
         <div>
-            <button>
-                Start
-            </button>
+            edit to be game??
         </div>
     )
 }

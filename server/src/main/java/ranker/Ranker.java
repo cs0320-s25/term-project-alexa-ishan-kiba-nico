@@ -1,5 +1,3 @@
 package ranker;
 
-public class Ranker {
-
-}
+public class Ranker {}

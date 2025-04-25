@@ -8,16 +8,12 @@ import spark.Spark;
 import storage.FirebaseUtilities;
 import storage.StorageInterface;
 
-/**
- * Class to initialize the server that starts Spark and runs various handlers.
- */
+/** Class to initialize the server that starts Spark and runs various handlers. */
 public class Server {
 
   static final int port = 3232;
 
-  /**
-   * Constructor to build a server that starts Spark and runs various handlers.
-   */
+  /** Constructor to build a server that starts Spark and runs various handlers. */
   public Server() {
     StorageInterface firebaseUtils;
     Spark.port(port);
