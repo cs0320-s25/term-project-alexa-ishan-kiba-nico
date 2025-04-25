@@ -1,6 +1,6 @@
 # IntelliJ Config
 .idea
-src/main/resources/
+resources/
 
 # Maven
 target/
