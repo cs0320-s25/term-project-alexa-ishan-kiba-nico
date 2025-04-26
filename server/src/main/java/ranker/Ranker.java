@@ -25,16 +25,16 @@ public class Ranker {
   }
 
   public List<RankedUser> rankUsers() throws Exception {
-    List <User> sorted = sortUsers();
+    List<User> sorted = sortUsers();
     List<RankedUser> rankedUsers = new ArrayList<RankedUser>();
     int currentRank = 1;
     int displayedRank = 1;
     int previousElo = 0;
 
-    for (int i=0; i<sorted.size(); i++) {
+    for (int i = 0; i < sorted.size(); i++) {
       User user = sorted.get(i);
 
-      if (i>0 && user.getElo() < previousElo) {
+      if (i > 0 && user.getElo() < previousElo) {
         displayedRank = currentRank;
       }
 
@@ -50,11 +50,11 @@ public class Ranker {
     List<RankedUser> rankedUsers = rankUsers();
 
     int cutoff = 10;
-    List<RankedUser> leaderboard = rankedUsers.stream().
-        filter(user -> user.getRank() <= cutoff).collect(Collectors.toList());
+    List<RankedUser> leaderboard =
+        rankedUsers.stream().filter(user -> user.getRank() <= cutoff).collect(Collectors.toList());
 
-    Optional<RankedUser> currentUser = rankedUsers.stream().
-        filter(user -> user.getUsername().equals(username)).findFirst();
+    Optional<RankedUser> currentUser =
+        rankedUsers.stream().filter(user -> user.getUsername().equals(username)).findFirst();
 
     currentUser.ifPresent(leaderboard::add);
 

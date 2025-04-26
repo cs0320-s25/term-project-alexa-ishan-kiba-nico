@@ -1,24 +1,25 @@
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.util.List;
+import org.junit.jupiter.api.Test;
 import ranker.Ranker;
 import storage.FirebaseUtilities;
 import storage.RankedUser;
 import storage.User;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 public class RankerTest {
 
   @Test
   public void testRankUsers() throws Exception {
-    Ranker ranker = new Ranker(new FirebaseUtilities()) {
-      @Override
-      public List<User> sortUsers() {
-        return MockData.getMockedUsers().stream()
-            .sorted((a, b) -> Integer.compare(b.getElo(), a.getElo()))
-            .toList();
-      }
-    };
+    Ranker ranker =
+        new Ranker(new FirebaseUtilities()) {
+          @Override
+          public List<User> sortUsers() {
+            return MockData.getMockedUsers().stream()
+                .sorted((a, b) -> Integer.compare(b.getElo(), a.getElo()))
+                .toList();
+          }
+        };
 
     List<RankedUser> ranked = ranker.rankUsers();
 

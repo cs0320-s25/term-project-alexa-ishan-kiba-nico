@@ -137,7 +137,7 @@ public class FirebaseUtilities implements StorageInterface {
     ApiFuture<QuerySnapshot> future = db.collection("users").get();
     List<QueryDocumentSnapshot> documents = future.get().getDocuments();
 
-    for (QueryDocumentSnapshot  doc : documents) {
+    for (QueryDocumentSnapshot doc : documents) {
       userIds.add(doc.getId());
     }
 
@@ -153,7 +153,7 @@ public class FirebaseUtilities implements StorageInterface {
     ApiFuture<QuerySnapshot> future = db.collection("users").get();
     List<QueryDocumentSnapshot> documents = future.get().getDocuments();
 
-    for (QueryDocumentSnapshot  doc : documents) {
+    for (QueryDocumentSnapshot doc : documents) {
       User u = doc.toObject(User.class);
       if (u.getUsername() != null) {
         users.add(u);

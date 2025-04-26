@@ -11,9 +11,15 @@ public class RankedUser {
     this.elo = elo;
   }
 
-  public int getRank() {return rank;}
+  public int getRank() {
+    return rank;
+  }
 
-  public String getUsername() {return username;}
+  public String getUsername() {
+    return username;
+  }
 
-  public int getElo() {return elo;}
+  public int getElo() {
+    return elo;
+  }
 }
