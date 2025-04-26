@@ -15,5 +15,9 @@ public interface StorageInterface {
 
   List<Map<String, Object>> getGlobalCollection(String collection_id) throws Exception;
 
+  List<String> getAllUserIds() throws InterruptedException, ExecutionException;
+
+  List<User> getAllUsers() throws InterruptedException, ExecutionException
+
   void clearUser(String uid) throws InterruptedException, ExecutionException;
 }
