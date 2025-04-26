@@ -31,7 +31,9 @@ function App() {
       <SignedOut>
         <SignInButton />
       </SignedOut>
-      {leaderboard ? <Leaderboard /> : <Dashboard />}
+      <SignedIn>
+        {leaderboard ? <Leaderboard /> : <Dashboard />}
+      </SignedIn>
     </div>
   )
 }
