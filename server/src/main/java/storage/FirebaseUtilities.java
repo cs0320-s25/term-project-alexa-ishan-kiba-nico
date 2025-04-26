@@ -128,6 +128,41 @@ public class FirebaseUtilities implements StorageInterface {
     dataRef.set(data);
   }
 
+  @Override
+  public List<String> getAllUserIds() throws InterruptedException, ExecutionException {
+    Firestore db = FirestoreClient.getFirestore();
+
+    List<String> userIds = new ArrayList<>();
+
+    ApiFuture<QuerySnapshot> future = db.collection("users").get();
+    List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+
+    for (QueryDocumentSnapshot  doc : documents) {
+      userIds.add(doc.getId());
+    }
+
+    return userIds;
+  }
+
+  @Override
+  public List<User> getAllUsers() throws InterruptedException, ExecutionException {
+    Firestore db = FirestoreClient.getFirestore();
+
+    List<User> users = new ArrayList<>();
+
+    ApiFuture<QuerySnapshot> future = db.collection("users").get();
+    List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+
+    for (QueryDocumentSnapshot  doc : documents) {
+      User u = doc.toObject(User.class);
+      if (u.getUsername() != null) {
+        users.add(u);
+      }
+    }
+
+    return users;
+  }
+
   // clears the collections inside of a specific user.
   @Override
   public void clearUser(String uid) throws IllegalArgumentException {
