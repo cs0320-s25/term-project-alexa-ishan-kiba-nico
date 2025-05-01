@@ -9,10 +9,8 @@ function App() {
   const [leaderboard, setLeaderboard] = useState<boolean>(false)
   const { user } = useUser();
 
-  const syncUser = async () => {
+  async function syncUser() {
     if (user) {
-      console.log(user.id)
-      console.log(user.username)
       if (user.id && user.username) {
         await addUser(user.id, user.username)
       }

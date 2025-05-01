@@ -39,7 +39,7 @@ public class LeaderboardHandler implements Route {
 
     try {
       Ranker ranker = new Ranker(storageHandler);
-      List<RankedUser> leaderboard = new ArrayList<RankedUser>(ranker.getLeaderboard(username));
+      List<RankedUser> leaderboard = new ArrayList<>(ranker.getLeaderboard(username));
       responseMap.put("result", "success");
       responseMap.put("leaderboard", leaderboard);
     } catch (Exception e) {
