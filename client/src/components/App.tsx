@@ -1,11 +1,29 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Leaderboard } from './Leaderboard';
 import { Dashboard } from './Dashboard';
+import { addUser } from "../utils/api"
 import '../styles/App.css'
-import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/clerk-react';
+import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from '@clerk/clerk-react';
 
 function App() {
   const [leaderboard, setLeaderboard] = useState<boolean>(false)
+  const { user } = useUser();
+
+  const syncUser = async () => {
+    if (user) {
+      console.log(user.id)
+      console.log(user.username)
+      if (user.id && user.username) {
+        await addUser(user.id, user.username)
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (user) {
+      syncUser();
+    }
+  }, [user])
 
   return (
     <div className='App'>

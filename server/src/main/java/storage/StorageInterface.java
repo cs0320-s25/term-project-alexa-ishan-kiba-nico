@@ -19,5 +19,7 @@ public interface StorageInterface {
 
   List<User> getAllUsers() throws InterruptedException, ExecutionException;
 
+  Map<String, Object> getData(String uid) throws InterruptedException, ExecutionException;
+
   void clearUser(String uid) throws InterruptedException, ExecutionException;
 }
