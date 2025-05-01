@@ -9,7 +9,6 @@ async function queryAPI(
   const paramsString = new URLSearchParams(query_params).toString();
   const url = `${HOST}/${endpoint}?${paramsString}`;
   const response = await fetch(url);
-  console.log("Calling API with URL:", url);
   if (!response.ok) {
     console.error(response.status, response.statusText);
   }
@@ -19,6 +18,12 @@ async function queryAPI(
 export async function addUser(uid: string, username: string) {
   return await queryAPI("user", {
     uid: uid,
+    username: username,
+  });
+}
+
+export async function getLeaderboard(username: string) {
+  return await queryAPI("leaderboard", {
     username: username,
   });
 }
