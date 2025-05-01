@@ -5,11 +5,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Types;
-
 import ranker.Ranker;
 import spark.Request;
 import spark.Response;
@@ -21,7 +19,9 @@ public class LeaderboardHandler implements Route {
 
   private final StorageInterface storageHandler;
 
-  public LeaderboardHandler(StorageInterface storageHandler) {this.storageHandler = storageHandler;}
+  public LeaderboardHandler(StorageInterface storageHandler) {
+    this.storageHandler = storageHandler;
+  }
 
   @Override
   public Object handle(Request request, Response response) {
@@ -47,7 +47,6 @@ public class LeaderboardHandler implements Route {
       responseMap.put("result", "failure");
       responseMap.put("error", e.getMessage());
     }
-
     return adapter.toJson(responseMap);
   }
 }

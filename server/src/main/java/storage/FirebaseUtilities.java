@@ -119,11 +119,9 @@ public class FirebaseUtilities implements StorageInterface {
   }
 
   @Override
-  public void addData(String uid, Map<String, Object> data)
-      throws IllegalArgumentException {
-    if (uid == null ||  data == null) {
-      throw new IllegalArgumentException(
-          "addDocument: uid or data cannot be null");
+  public void addData(String uid, Map<String, Object> data) throws IllegalArgumentException {
+    if (uid == null || data == null) {
+      throw new IllegalArgumentException("addDocument: uid or data cannot be null");
     }
     // adds new data for user 'uid'
 
@@ -220,4 +218,3 @@ public class FirebaseUtilities implements StorageInterface {
     }
   }
 }
-
