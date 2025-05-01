@@ -3,6 +3,7 @@ package server;
 import static spark.Spark.after;
 
 import handlers.LeaderboardHandler;
+import handlers.UserHandler;
 import java.io.IOException;
 import spark.Spark;
 import storage.FirebaseUtilities;
@@ -32,6 +33,7 @@ public class Server {
       firebaseUtils = new FirebaseUtilities();
 
       Spark.get("/leaderboard", new LeaderboardHandler(firebaseUtils));
+      Spark.get("/user", new UserHandler(firebaseUtils));
       Spark.init();
       Spark.awaitInitialization();
 

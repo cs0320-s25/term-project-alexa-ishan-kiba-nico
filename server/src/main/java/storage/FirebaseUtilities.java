@@ -88,6 +88,15 @@ public class FirebaseUtilities implements StorageInterface {
   }
 
   @Override
+  public Map<String, Object> getData(String uid) throws InterruptedException, ExecutionException {
+    Firestore db = FirestoreClient.getFirestore();
+
+    DocumentReference docRef = db.collection("users").document(uid);
+
+    return docRef.get().get().getData();
+  }
+
+  @Override
   public void addDocument(String uid, String collection_id, String doc_id, Map<String, Object> data)
       throws IllegalArgumentException {
     if (uid == null || collection_id == null || doc_id == null || data == null) {
@@ -117,10 +126,6 @@ public class FirebaseUtilities implements StorageInterface {
           "addDocument: uid or data cannot be null");
     }
     // adds new data for user 'uid'
-
-    // TODO: FIRESTORE PART 1:
-    // use the guide below to implement this handler
-    // - https://firebase.google.com/docs/firestore/quickstart#add_data
 
     Firestore db = FirestoreClient.getFirestore();
     // 1: Get a ref to the collection that you created

@@ -19,7 +19,7 @@ import storage.StorageInterface;
 
 public class LeaderboardHandler implements Route {
 
-  public StorageInterface storageHandler;
+  private final StorageInterface storageHandler;
 
   public LeaderboardHandler(StorageInterface storageHandler) {this.storageHandler = storageHandler;}
 
@@ -31,6 +31,12 @@ public class LeaderboardHandler implements Route {
     JsonAdapter<Map<String, Object>> adapter = moshi.adapter(mapStringObject);
     Map<String, Object> responseMap = new HashMap<>();
 
+    if (username == null || username.isEmpty()) {
+      responseMap.put("result", "failure");
+      responseMap.put("error", "Username is required");
+      return adapter.toJson(responseMap);
+    }
+
     try {
       Ranker ranker = new Ranker(storageHandler);
       List<RankedUser> leaderboard = new ArrayList<RankedUser>(ranker.getLeaderboard(username));
@@ -38,7 +44,7 @@ public class LeaderboardHandler implements Route {
       responseMap.put("leaderboard", leaderboard);
     } catch (Exception e) {
       e.printStackTrace();
-      responseMap.put("response_type", "failure");
+      responseMap.put("result", "failure");
       responseMap.put("error", e.getMessage());
     }
 
