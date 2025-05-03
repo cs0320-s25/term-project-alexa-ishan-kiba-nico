@@ -4,6 +4,7 @@ import static spark.Spark.after;
 
 import handlers.EloHandler;
 import handlers.LeaderboardHandler;
+import handlers.TriviaQuestionHandler;
 import handlers.UserHandler;
 import java.io.IOException;
 import spark.Spark;
@@ -32,6 +33,7 @@ public class Server {
       Spark.get("/leaderboard", new LeaderboardHandler(firebaseUtils));
       Spark.get("/user", new UserHandler(firebaseUtils));
       Spark.get("/elo", new EloHandler(firebaseUtils));
+      Spark.get("/question", new TriviaQuestionHandler());
       Spark.init();
       Spark.awaitInitialization();
 
