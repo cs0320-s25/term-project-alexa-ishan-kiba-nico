@@ -15,9 +15,9 @@ import storage.User;
 
 public class UserHandler implements Route {
 
-  private final StorageInterface storageHander;
+  private final StorageInterface storageHandler;
 
-  public UserHandler(StorageInterface storageHander) {this.storageHander = storageHander;}
+  public UserHandler(StorageInterface storageHandler) {this.storageHandler = storageHandler;}
 
   @Override
   public Object handle (Request request, Response response) {
@@ -41,18 +41,18 @@ public class UserHandler implements Route {
     }
 
     try {
-      List<String> users = this.storageHander.getAllUserIds();
+      List<String> users = this.storageHandler.getAllUserIds();
 
       Map<String, Object> userData;
       if (users.contains(uid)) {
-        userData = this.storageHander.getData(uid);
+        userData = this.storageHandler.getData(uid);
         userData.put("username", username);
       } else {
         userData = new HashMap<>();
         userData.put("username", username);
         userData.put("elo", 0);
       }
-      this.storageHander.addData(uid, userData);
+      this.storageHandler.addData(uid, userData);
       responseMap.put("result", "success");
       responseMap.put("uid", uid);
       responseMap.put("user", username);

@@ -13,19 +13,15 @@ export function Leaderboard() {
   const [leaderboardData, setLeaderboardData] = useState<LeaderboardEntry[]>([]);
   const { user } = useUser();
 
-  async function fetchLeaderboard() {
-    getLeaderboard(user?.id).then((json) => {
-      if (json.result === "success") {
-        setLeaderboardData(json.leaderboard);
-      }
-    });
-  }
-
   useEffect(() => {
-    if (user?.id) {
-      fetchLeaderboard();
+    if (user?.username) {
+        getLeaderboard(user.username).then((json) => {
+            if (json.result === "success") {
+                setLeaderboardData(json.leaderboard)
+            }
+        })
     }
-  }, [user]);
+  }, [user])
 
   return (
     <div className="leaderboard-container">

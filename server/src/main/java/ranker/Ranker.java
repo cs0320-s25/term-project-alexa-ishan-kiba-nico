@@ -56,7 +56,9 @@ public class Ranker {
     Optional<RankedUser> currentUser =
         rankedUsers.stream().filter(user -> user.getUsername().equals(username)).findFirst();
 
-    currentUser.ifPresent(leaderboard::add);
+    if (currentUser.isPresent() && currentUser.get().getRank() > cutoff) {
+      leaderboard.add(currentUser.get());
+    };
 
     return leaderboard;
   }
