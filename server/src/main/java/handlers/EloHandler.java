@@ -1,13 +1,13 @@
-//package handlers;
+// package handlers;
 //
-//import java.util.HashMap;
-//import java.util.Map;
-//import spark.Request;
-//import spark.Response;
-//import spark.Route;
-//import storage.StorageInterface;
+// import java.util.HashMap;
+// import java.util.Map;
+// import spark.Request;
+// import spark.Response;
+// import spark.Route;
+// import storage.StorageInterface;
 //
-//public class EloHandler implements Route {
+// public class EloHandler implements Route {
 //
 //  private final StorageInterface storage;
 //
@@ -75,4 +75,4 @@
 //
 //    return String.format("Updated ratings - %s: %d, %s: %d", p1Name, newP1, p2Name, newP2);
 //  }
-//}
+// }

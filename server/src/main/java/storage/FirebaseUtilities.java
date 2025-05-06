@@ -97,7 +97,8 @@ public class FirebaseUtilities implements StorageInterface {
   }
 
   @Override
-  public Map<String, Object> getCategoryData(String category) throws InterruptedException, ExecutionException {
+  public Map<String, Object> getCategoryData(String category)
+      throws InterruptedException, ExecutionException {
     Firestore db = FirestoreClient.getFirestore();
 
     DocumentReference docRef = db.collection("topics").document(category);

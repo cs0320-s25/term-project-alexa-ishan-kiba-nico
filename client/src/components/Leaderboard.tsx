@@ -1,26 +1,18 @@
-import { DailyLeaderboard } from "./DailyLeaderboard";
-import { TopicLeaderboard } from "./TopicLeaderboard";
-import { useState } from 'react';
-
-enum Section {
-    DAILY = "DAILY",
-    TOPIC = "TOPIC",
-    NONE = "NONE",
-  }
+import { Link, Outlet } from 'react-router-dom';
 
 export function Leaderboard() {
-    const [section, setSection] = useState<Section>(Section.NONE);
     
     return (
         <div>
-            <button onClick={() => setSection(Section.DAILY)}>
-                Daily Leaderboard
-            </button>
-            <button onClick={() => setSection(Section.TOPIC)}>
-                Topic Leaderboard
-            </button>
-            {section === Section.DAILY ? <DailyLeaderboard /> : null}
-            {section === Section.TOPIC ? <TopicLeaderboard /> : null}
+            <div>
+                <Link to="daily">
+                    <button>Daily Leaderboard</button>
+                </Link>
+                <Link to="topic">
+                    <button>Topic Leaderboard</button>
+                </Link>
+            </div>
+            <Outlet />
         </div>
     )
 }

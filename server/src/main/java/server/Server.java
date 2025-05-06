@@ -2,7 +2,6 @@ package server;
 
 import static spark.Spark.after;
 
-//import handlers.EloHandler;
 import handlers.DailyLeaderboardHandler;
 import handlers.TopicLeaderboardHandler;
 import handlers.TriviaQuestionHandler;
