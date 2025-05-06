@@ -34,7 +34,7 @@ public class Server {
       Spark.get("/topicleaderboard", new TopicLeaderboardHandler(firebaseUtils));
       Spark.get("/user", new UserHandler(firebaseUtils));
       Spark.get("/question", new TriviaQuestionHandler(firebaseUtils));
-//      Spark.get("/elo", new EloHandler(firebaseUtils));
+      //      Spark.get("/elo", new EloHandler(firebaseUtils));
       Spark.init();
       Spark.awaitInitialization();
 

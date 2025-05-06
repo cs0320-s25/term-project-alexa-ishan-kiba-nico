@@ -132,5 +132,3 @@ public class TriviaQuestionHandler implements Route {
         .orElse("Expert"); // default if value is above all defined levels
   }
 }
-
-
