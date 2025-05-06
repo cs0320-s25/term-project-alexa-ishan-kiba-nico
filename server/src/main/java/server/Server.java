@@ -2,13 +2,10 @@ package server;
 
 import static spark.Spark.after;
 
-<<<<<<< HEAD
+
 import handlers.DailyLeaderboardHandler;
 import handlers.TopicLeaderboardHandler;
-=======
-import handlers.EloHandler;
-import handlers.LeaderboardHandler;
->>>>>>> a560099e4443207fd3576f04bdc4f0f67fe86ded
+
 import handlers.TriviaQuestionHandler;
 import handlers.UserHandler;
 import java.io.IOException;
@@ -38,13 +35,12 @@ public class Server {
       Spark.get("/dailyleaderboard", new DailyLeaderboardHandler(firebaseUtils));
       Spark.get("/topicleaderboard", new TopicLeaderboardHandler(firebaseUtils));
       Spark.get("/user", new UserHandler(firebaseUtils));
-<<<<<<< HEAD
+
       Spark.get("/question", new TriviaQuestionHandler(firebaseUtils));
-//      Spark.get("/elo", new EloHandler(firebaseUtils));
-=======
-      Spark.get("/elo", new EloHandler(firebaseUtils));
-      Spark.get("/question", new TriviaQuestionHandler());
->>>>>>> a560099e4443207fd3576f04bdc4f0f67fe86ded
+
+
+      Spark.get("/question", new TriviaQuestionHandler(firebaseUtils));
+
       Spark.init();
       Spark.awaitInitialization();
 
