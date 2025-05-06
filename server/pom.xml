@@ -43,6 +43,20 @@
       <version>1.13.0</version>
     </dependency>
 
+    <dependency>
+      <groupId>com.squareup.okhttp3</groupId>
+      <artifactId>okhttp</artifactId>
+      <version>3.14.9</version> <!-- or another specific version -->
+    </dependency>
+
+    <dependency>
+      <groupId>com.squareup.okhttp3</groupId>
+      <artifactId>okhttp</artifactId>
+      <version>4.12.0</version> <!-- or latest from Maven Central -->
+    </dependency>
+
+
+
     <!--
            Spark is a lightweight framework for creating web applications.
            Spark is most commonly used to create APIs and websites.
