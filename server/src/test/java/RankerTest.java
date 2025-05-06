@@ -4,9 +4,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ranker.Ranker;
-import storage.FirebaseUtilities;
 import storage.RankedUser;
-import storage.User;
 
 public class RankerTest {
 
@@ -22,17 +20,17 @@ public class RankerTest {
     List<RankedUser> ranked = this.ranker.rankUsers();
 
     // Assertions
-    assertEquals("Grace", ranked.get(0).getUsername());
-    assertEquals(2000, ranked.get(0).getElo());
-    assertEquals(1, ranked.get(0).getRank());
+    assertEquals("Grace", ranked.get(0).username());
+    assertEquals(2000, ranked.get(0).elo());
+    assertEquals(1, ranked.get(0).rank());
 
-    assertEquals("Bob", ranked.get(1).getUsername());
-    assertEquals("Daisy", ranked.get(2).getUsername());
-    assertEquals(2, ranked.get(1).getRank());
-    assertEquals(2, ranked.get(2).getRank()); // tie check
+    assertEquals("Bob", ranked.get(1).username());
+    assertEquals("Daisy", ranked.get(2).username());
+    assertEquals(2, ranked.get(1).rank());
+    assertEquals(2, ranked.get(2).rank()); // tie check
 
-    assertEquals("Charlie", ranked.get(3).getUsername());
-    assertEquals(4, ranked.get(3).getRank()); // after tie, rank increases
+    assertEquals("Charlie", ranked.get(3).username());
+    assertEquals(4, ranked.get(3).rank()); // after tie, rank increases
 
     assertEquals(12, ranked.size()); // total mocked users
   }
@@ -44,12 +42,12 @@ public class RankerTest {
     List<RankedUser> leaderboard = this.ranker.getLeaderboard(username);
 
     long count = leaderboard.stream()
-        .filter(u -> u.getUsername().equals(username))
+        .filter(u -> u.username().equals(username))
         .count();
 
     assertEquals(1, count, "Top-10 user should appear only once");
     assertEquals(10, leaderboard.size(), "Top-10 users");
-    assertTrue(leaderboard.stream().allMatch(u -> u.getRank() <= 10),
+    assertTrue(leaderboard.stream().allMatch(u -> u.rank() <= 10),
         "All users should have rank <= 10"
     );
   }
@@ -61,11 +59,11 @@ public class RankerTest {
     List<RankedUser> leaderboard = this.ranker.getLeaderboard(username);
 
     long count = leaderboard.stream()
-        .filter(u -> u.getUsername().equals(username))
+        .filter(u -> u.username().equals(username))
         .count();
 
     assertEquals(1, count, "User not in top 10 should be added once");
-    assertEquals(username, leaderboard.get(leaderboard.size() - 1).getUsername(),
+    assertEquals(username, leaderboard.get(leaderboard.size() - 1).username(),
         "User not in top 10 should appear at the end");
   }
 }

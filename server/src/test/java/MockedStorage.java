@@ -33,12 +33,23 @@ public class MockedStorage implements StorageInterface {
   }
 
   @Override
+  public List<String> getAllCategories() throws InterruptedException, ExecutionException {
+    return List.of();
+  }
+
+  @Override
   public List<User> getAllUsers() throws InterruptedException, ExecutionException {
     return MockData.getMockedUsers();
   }
 
   @Override
   public Map<String, Object> getData(String uid) throws InterruptedException, ExecutionException {
+    return Map.of();
+  }
+
+  @Override
+  public Map<String, Object> getCategoryData(String category)
+      throws InterruptedException, ExecutionException {
     return Map.of();
   }
 

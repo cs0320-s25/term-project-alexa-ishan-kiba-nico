@@ -9,6 +9,7 @@ async function queryAPI(
   const paramsString = new URLSearchParams(query_params).toString();
   const url = `${HOST}/${endpoint}?${paramsString}`;
   const response = await fetch(url);
+  console.log(response)
   if (!response.ok) {
     console.error(response.status, response.statusText);
   }
@@ -22,8 +23,12 @@ export async function addUser(uid: string, username: string) {
   });
 }
 
-export async function getLeaderboard(username: string) {
-  return await queryAPI("leaderboard", {
+export async function getDailyLeaderboard(username: string) {
+  return await queryAPI("dailyleaderboard", {
     username: username,
   });
+}
+
+export async function getTopicLeaderboard() {
+  return await queryAPI("topicleaderboard", {});
 }
