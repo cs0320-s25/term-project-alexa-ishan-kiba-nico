@@ -97,6 +97,15 @@ public class FirebaseUtilities implements StorageInterface {
   }
 
   @Override
+  public Map<String, Object> getCategoryData(String category) throws InterruptedException, ExecutionException {
+    Firestore db = FirestoreClient.getFirestore();
+
+    DocumentReference docRef = db.collection("topics").document(category);
+
+    return docRef.get().get().getData();
+  }
+
+  @Override
   public void addDocument(String uid, String collection_id, String doc_id, Map<String, Object> data)
       throws IllegalArgumentException {
     if (uid == null || collection_id == null || doc_id == null || data == null) {
@@ -147,6 +156,22 @@ public class FirebaseUtilities implements StorageInterface {
     }
 
     return userIds;
+  }
+
+  @Override
+  public List<String> getAllCategories() throws InterruptedException, ExecutionException {
+    Firestore db = FirestoreClient.getFirestore();
+
+    List<String> categories = new ArrayList<>();
+
+    ApiFuture<QuerySnapshot> future = db.collection("topics").get();
+    List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+
+    for (QueryDocumentSnapshot doc : documents) {
+      categories.add(doc.getId());
+    }
+
+    return categories;
   }
 
   @Override

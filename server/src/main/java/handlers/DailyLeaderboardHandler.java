@@ -15,11 +15,11 @@ import spark.Route;
 import storage.RankedUser;
 import storage.StorageInterface;
 
-public class LeaderboardHandler implements Route {
+public class DailyLeaderboardHandler implements Route {
 
   private final StorageInterface storageHandler;
 
-  public LeaderboardHandler(StorageInterface storageHandler) {
+  public DailyLeaderboardHandler(StorageInterface storageHandler) {
     this.storageHandler = storageHandler;
   }
 
@@ -38,7 +38,7 @@ public class LeaderboardHandler implements Route {
     }
 
     try {
-      Ranker ranker = new Ranker(storageHandler);
+      Ranker ranker = new Ranker(this.storageHandler);
       List<RankedUser> leaderboard = new ArrayList<>(ranker.getLeaderboard(username));
       responseMap.put("result", "success");
       responseMap.put("leaderboard", leaderboard);

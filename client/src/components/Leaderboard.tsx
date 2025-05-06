@@ -1,56 +1,26 @@
-import { useEffect, useState } from 'react';
-import '../styles/Leaderboard.css';
-import { getLeaderboard } from "../utils/api";
-import { useUser } from '@clerk/clerk-react';
+import { DailyLeaderboard } from "./DailyLeaderboard";
+import { TopicLeaderboard } from "./TopicLeaderboard";
+import { useState } from 'react';
 
-interface LeaderboardEntry {
-  rank: number;
-  username: string;
-  elo: number;
-}
+enum Section {
+    DAILY = "DAILY",
+    TOPIC = "TOPIC",
+    NONE = "NONE",
+  }
 
 export function Leaderboard() {
-  const [leaderboardData, setLeaderboardData] = useState<LeaderboardEntry[]>([]);
-  const { user } = useUser();
-
-  useEffect(() => {
-    if (user?.username) {
-        getLeaderboard(user.username).then((json) => {
-            if (json.result === "success") {
-                setLeaderboardData(json.leaderboard)
-            }
-        })
-    }
-  }, [user])
-
-  return (
-    <div className="leaderboard-container">
-      <h2 aria-label="leaderboard-header">Leaderboard</h2> 
-
-      <table className="leaderboard-table">
-        <thead>
-          <tr>
-            <th>Rank</th>
-            <th>Username</th>
-            <th>Elo</th>
-          </tr>
-        </thead>
-        <tbody>
-          {leaderboardData.map((user, index) => (
-            <tr key={user.username}>
-              <td tabIndex={0} aria-label={`Row ${index + 1}, Column 1: ${user.rank}`}>
-                {user.rank}
-              </td>
-              <td tabIndex={0} aria-label={`Row ${index + 1}, Column 2: ${user.username}`}>
-                {user.username}
-              </td>
-              <td tabIndex={0} aria-label={`Row ${index + 1}, Column 3: ${user.elo}`}>
-                {user.elo}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
+    const [section, setSection] = useState<Section>(Section.NONE);
+    
+    return (
+        <div>
+            <button onClick={() => setSection(Section.DAILY)}>
+                Daily Leaderboard
+            </button>
+            <button onClick={() => setSection(Section.TOPIC)}>
+                Topic Leaderboard
+            </button>
+            {section === Section.DAILY ? <DailyLeaderboard /> : null}
+            {section === Section.TOPIC ? <TopicLeaderboard /> : null}
+        </div>
+    )
 }
