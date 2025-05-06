@@ -1,6 +1,5 @@
 package handlers;
 
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -20,20 +19,16 @@ import spark.Response;
 import spark.Route;
 import storage.StorageInterface;
 
-
 public class TriviaQuestionHandler implements Route {
 
-
   private static final String API_KEY =
-      System.getenv("OPEN_AI_API_KEY"); // Replace with env var in production
+      System.getenv("OPEN_API_KEY"); // Replace with env var in production
   private static final String API_URL = "https://api.openai.com/v1/chat/completions";
   private final StorageInterface storageInterface;
-
 
   public TriviaQuestionHandler(StorageInterface storageInterface) {
     this.storageInterface = storageInterface;
   }
-
 
   @Override
   public Object handle(Request request, Response response) {
@@ -45,12 +40,10 @@ public class TriviaQuestionHandler implements Route {
     String elo = request.queryParams("elo");
     String topic = request.queryParams("topic");
 
-
     if (elo == null || topic == null) {
       response.status(400);
       return "Missing required query parameters: 'elo' and/or 'topic'";
     }
-
 
     // Parse elo value
     Number eloRanking;
@@ -61,7 +54,6 @@ public class TriviaQuestionHandler implements Route {
       return "Elo must be a valid number";
     }
 
-
     Map<Number, String> difficultyLevel = new HashMap<>();
     difficultyLevel.put(20, "Easy");
     difficultyLevel.put(50, "Medium");
@@ -69,12 +61,9 @@ public class TriviaQuestionHandler implements Route {
     difficultyLevel.put(200, "Very Hard");
     difficultyLevel.put(500, "Expert");
 
-
     String level = getDifficultyLevel(difficultyLevel, eloRanking);
 
-
     OkHttpClient client = new OkHttpClient();
-
 
     String prompt =
         """
@@ -89,20 +78,16 @@ public class TriviaQuestionHandler implements Route {
             + " make the question of topic "
             + topic;
 
-
     JsonObject message = new JsonObject();
     message.addProperty("role", "user");
     message.addProperty("content", prompt);
 
-
     JsonArray messages = new JsonArray();
     messages.add(message);
-
 
     JsonObject requestBody = new JsonObject();
     requestBody.addProperty("model", "gpt-3.5-turbo");
     requestBody.add("messages", messages);
-
 
     okhttp3.Request apiRequest =
         new okhttp3.Request.Builder()
@@ -111,7 +96,6 @@ public class TriviaQuestionHandler implements Route {
             .addHeader("Content-Type", "application/json")
             .post(RequestBody.create(requestBody.toString(), MediaType.parse("application/json")))
             .build();
-
 
     try (okhttp3.Response apiResponse = client.newCall(apiRequest).execute()) {
       if (!apiResponse.isSuccessful()) {
@@ -123,7 +107,6 @@ public class TriviaQuestionHandler implements Route {
       } else {
         String responseBody = apiResponse.body().string();
 
-
         JsonObject json = JsonParser.parseString(responseBody).getAsJsonObject();
         String content =
             json.getAsJsonArray("choices")
@@ -133,12 +116,10 @@ public class TriviaQuestionHandler implements Route {
                 .get("content")
                 .getAsString();
 
-
         // Extract the trivia question, options, and answer from the API response content
         String question = extractField(content, "question");
         String options = extractField(content, "options");
         String answer = extractField(content, "answer");
-
 
         String[] choices =
             options
@@ -155,16 +136,13 @@ public class TriviaQuestionHandler implements Route {
       responseMap.put("error", "IOException: " + e.getMessage());
     }
 
-
     // Serialize the Map into JSON response
     return adapter.toJson(responseMap);
   }
 
-
   private String extractField(String content, String field) {
     try {
       JsonObject contentJson = JsonParser.parseString(content).getAsJsonObject();
-
 
       if (field.equals("question")) {
         return contentJson.get("question").getAsString();
@@ -186,7 +164,6 @@ public class TriviaQuestionHandler implements Route {
     return "";
   }
 
-
   public JsonArray extractOptions(String content, String field) {
     try {
       JsonObject contentJson = JsonParser.parseString(content).getAsJsonObject();
@@ -197,7 +174,6 @@ public class TriviaQuestionHandler implements Route {
     }
   }
 
-
   public static String getDifficultyLevel(Map<Number, String> difficultyLevel, Number value) {
     return difficultyLevel.entrySet().stream()
         .sorted(Comparator.comparingDouble(entry -> entry.getKey().doubleValue()))
@@ -207,4 +183,3 @@ public class TriviaQuestionHandler implements Route {
         .orElse("Expert"); // default if value is above all defined levels
   }
 }
-
