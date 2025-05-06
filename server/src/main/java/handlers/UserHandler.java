@@ -11,16 +11,17 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 import storage.StorageInterface;
-import storage.User;
 
 public class UserHandler implements Route {
 
   private final StorageInterface storageHandler;
 
-  public UserHandler(StorageInterface storageHandler) {this.storageHandler = storageHandler;}
+  public UserHandler(StorageInterface storageHandler) {
+    this.storageHandler = storageHandler;
+  }
 
   @Override
-  public Object handle (Request request, Response response) {
+  public Object handle(Request request, Response response) {
     String uid = request.queryParams("uid");
     String username = request.queryParams("username");
     Moshi moshi = new Moshi.Builder().build();
@@ -63,5 +64,5 @@ public class UserHandler implements Route {
     }
 
     return adapter.toJson(responseMap);
-    }
+  }
 }

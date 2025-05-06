@@ -23,7 +23,8 @@ public interface StorageInterface {
 
   Map<String, Object> getData(String uid) throws InterruptedException, ExecutionException;
 
-  Map<String, Object> getCategoryData(String category) throws InterruptedException, ExecutionException;
+  Map<String, Object> getCategoryData(String category)
+      throws InterruptedException, ExecutionException;
 
   void clearUser(String uid) throws InterruptedException, ExecutionException;
 }

@@ -58,7 +58,8 @@ public class Ranker {
 
     if (currentUser.isPresent() && currentUser.get().getRank() > cutoff) {
       leaderboard.add(currentUser.get());
-    };
+    }
+    ;
 
     return leaderboard;
   }

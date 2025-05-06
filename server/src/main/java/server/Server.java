@@ -2,7 +2,6 @@ package server;
 
 import static spark.Spark.after;
 
-//import handlers.EloHandler;
 import handlers.DailyLeaderboardHandler;
 import handlers.TopicLeaderboardHandler;
 import handlers.UserHandler;
@@ -33,7 +32,7 @@ public class Server {
       Spark.get("/dailyleaderboard", new DailyLeaderboardHandler(firebaseUtils));
       Spark.get("/topicleaderboard", new TopicLeaderboardHandler(firebaseUtils));
       Spark.get("/user", new UserHandler(firebaseUtils));
-//      Spark.get("/elo", new EloHandler(firebaseUtils));
+      //      Spark.get("/elo", new EloHandler(firebaseUtils));
       Spark.init();
       Spark.awaitInitialization();
 

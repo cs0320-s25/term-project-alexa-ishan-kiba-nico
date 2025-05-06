@@ -41,15 +41,12 @@ public class RankerTest {
 
     List<RankedUser> leaderboard = this.ranker.getLeaderboard(username);
 
-    long count = leaderboard.stream()
-        .filter(u -> u.username().equals(username))
-        .count();
+    long count = leaderboard.stream().filter(u -> u.username().equals(username)).count();
 
     assertEquals(1, count, "Top-10 user should appear only once");
     assertEquals(10, leaderboard.size(), "Top-10 users");
-    assertTrue(leaderboard.stream().allMatch(u -> u.rank() <= 10),
-        "All users should have rank <= 10"
-    );
+    assertTrue(
+        leaderboard.stream().allMatch(u -> u.rank() <= 10), "All users should have rank <= 10");
   }
 
   @Test
@@ -58,12 +55,12 @@ public class RankerTest {
 
     List<RankedUser> leaderboard = this.ranker.getLeaderboard(username);
 
-    long count = leaderboard.stream()
-        .filter(u -> u.username().equals(username))
-        .count();
+    long count = leaderboard.stream().filter(u -> u.username().equals(username)).count();
 
     assertEquals(1, count, "User not in top 10 should be added once");
-    assertEquals(username, leaderboard.get(leaderboard.size() - 1).username(),
+    assertEquals(
+        username,
+        leaderboard.get(leaderboard.size() - 1).username(),
         "User not in top 10 should appear at the end");
   }
 }
