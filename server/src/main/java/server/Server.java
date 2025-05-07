@@ -3,6 +3,7 @@ package server;
 import static spark.Spark.after;
 
 import handlers.DailyLeaderboardHandler;
+import handlers.TestTriviaHandler;
 import handlers.TopicLeaderboardHandler;
 import handlers.TriviaQuestionHandler;
 import handlers.UserHandler;
@@ -35,6 +36,7 @@ public class Server {
       Spark.get("/user", new UserHandler(firebaseUtils));
 
       Spark.get("/question", new TriviaQuestionHandler(firebaseUtils));
+      Spark.get("/test", new TestTriviaHandler());
 
       Spark.init();
       Spark.awaitInitialization();
