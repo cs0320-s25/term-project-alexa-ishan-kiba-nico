@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate } from 'react-router-dom';
+import { useLocation, BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Leaderboard } from './Leaderboard';
 import { Dashboard } from './Dashboard';
@@ -7,50 +7,59 @@ import '../styles/App.css'
 import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from '@clerk/clerk-react';
 import { DailyLeaderboard } from './DailyLeaderboard';
 import { TopicLeaderboard } from './TopicLeaderboard';
+import Trivia from './Trivia';
 
 function MainApp() {
   const { user } = useUser();
   const navigate = useNavigate();
-  const currentPath = window.location.pathname;
+  const location = useLocation();
+  const currentPath = location.pathname;
 
   async function syncUser() {
-    if (user) {
-      if (user.id && user.username) {
-        await addUser(user.id, user.username)
-      }
+    if (user?.id && user.username) {
+      await addUser(user.id, user.username);
     }
   }
 
   useEffect(() => {
     if (user) {
       syncUser();
+      navigate('/dashboard');
     }
-  }, [user])
+  }, [user]);
+
+  // Only show header on /dashboard or /leaderboard paths
+  const showHeader =
+    currentPath.startsWith("/dashboard") || currentPath.startsWith("/leaderboard");
 
   return (
     <div className='App'>
-      <div className='App-header'>
-        <SignedIn>
-          {currentPath === "/dashboard" ? (
-            <button className="leaderboard-button" onClick={() => 
-              navigate('/leaderboard')
-              }>Leaderboard</button>
-             ) : (
-            <button className="dashboard-button" onClick={() => 
-              navigate('/dashboard')
-              }>Dashboard</button>
-            )}
-        </SignedIn>
-        <h1 aria-label='Quiz Whiz Header'>Quiz Whiz</h1>
-        <SignedIn>
-          <div className="user-button-wrapper">
-            <UserButton />
-          </div>
-        </SignedIn>
-      </div>
+      {showHeader && (
+        <div className='App-header'>
+          <SignedIn>
+            {currentPath.startsWith("/dashboard") ? (
+              <button className="leaderboard-button" onClick={() => navigate('/leaderboard')}>
+                Leaderboard
+              </button>
+            ) : currentPath.startsWith("/leaderboard") ? (
+              <button className="dashboard-button" onClick={() => navigate('/dashboard')}>
+                Dashboard
+              </button>
+            ) : null}
+          </SignedIn>
+          <h1 aria-label='Quiz Whiz Header'>Quiz Whiz</h1>
+          <SignedIn>
+            <div className="user-button-wrapper">
+              <UserButton />
+            </div>
+          </SignedIn>
+        </div>
+      )}
+
       <SignedOut>
         <SignInButton />
       </SignedOut>
+
       <SignedIn>
         <Routes>
           <Route path="/dashboard" element={<Dashboard />} />
@@ -58,17 +67,18 @@ function MainApp() {
             <Route path="daily" element={<DailyLeaderboard />} />
             <Route path="topic" element={<TopicLeaderboard />} />
           </Route>
-          <Route path="*" element={<Dashboard />} />
+          <Route path="/trivia" element={<Trivia />} />
         </Routes>
       </SignedIn>
     </div>
-  )
+  );
 }
 
-export default function App () {
+export default function App() {
   return (
     <Router>
       <MainApp />
     </Router>
   );
 }
+
