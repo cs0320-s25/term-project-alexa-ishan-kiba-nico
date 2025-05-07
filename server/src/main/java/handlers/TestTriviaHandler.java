@@ -40,7 +40,7 @@ public class TestTriviaHandler implements Route {
 
     String prompt =
         """
-        Generate 3 unique trivia questions that increase in difficulty in the following JSON format:
+        Generate 10 unique trivia questions that increase in difficulty in the following JSON format:
         [
           {
             "question": "string",
@@ -113,6 +113,7 @@ public class TestTriviaHandler implements Route {
           questions.add(questionMap);
         }
         responseMap.put("questions", questions);
+        responseMap.put("result", "success");
         return adapter.toJson(responseMap);
       }
     } catch (IOException e) {
