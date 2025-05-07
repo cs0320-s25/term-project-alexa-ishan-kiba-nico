@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './Trivia.css';
+import '../styles/Trivia.css';
 import { useNavigate } from 'react-router-dom';
 
 

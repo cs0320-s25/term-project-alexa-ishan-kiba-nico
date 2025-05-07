@@ -4,6 +4,7 @@ import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Types;
 import java.lang.reflect.Type;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,15 +44,22 @@ public class UserHandler implements Route {
 
     try {
       List<String> users = this.storageHandler.getAllUserIds();
+      LocalDate date = LocalDate.now();
+      String dateString = date.toString();
 
       Map<String, Object> userData;
       if (users.contains(uid)) {
         userData = this.storageHandler.getData(uid);
         userData.put("username", username);
+        if (!userData.get("date").equals(dateString)) {
+          userData.put("elo", 0);
+          userData.put("date", dateString);
+        }
       } else {
         userData = new HashMap<>();
         userData.put("username", username);
         userData.put("elo", 0);
+        userData.put("date", dateString);
       }
       this.storageHandler.addData(uid, userData);
       responseMap.put("result", "success");
