@@ -35,7 +35,7 @@ public class Server {
       Spark.get("/user", new UserHandler(firebaseUtils));
 
       Spark.get("/question", new TriviaQuestionHandler(firebaseUtils));
-      
+
       Spark.init();
       Spark.awaitInitialization();
 
