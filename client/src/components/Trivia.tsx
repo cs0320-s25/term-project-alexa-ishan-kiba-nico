@@ -8,7 +8,9 @@ export function Trivia() {
    const [choices, setChoices] = useState<String[]>([]);
    const [answer, setAnswer] = useState<String>("");
    const [count, setCount] = useState<number>(1);
-   const [screen, setScreen] = useState<String>("white-screen");
+   const [correctAnswer, setCorrectAnswer] = useState<Boolean>(false);
+   const [wrongAnswer, setWrongAnswer] = useState<Boolean>(false);
+   const [isAnswered, setIsAnswered] = useState<boolean>(false);
    const navigate = useNavigate();
 
 
@@ -23,9 +25,7 @@ export function Trivia() {
                setQuestion(data.question);
                setChoices(data.options);
                setAnswer(data.answer);
-               console.log(question)
-               console.log(data)
-               console.log(choices)
+               
            }
        } catch (error: any) {
            console.log(error);
@@ -44,18 +44,13 @@ export function Trivia() {
 
 
    function compareAnswer(choice: any) {
-       if (answer === choice) {
-           setScreen("green-screen");
-           setTimeout(() => {
-               setScreen("white-screen");
-           }, 1000); // Flash green for 1 second
-       } else {
-           setScreen("red-screen");
-           setTimeout(() => {
-               setScreen("white-screen");
-           }, 1000); // Flash red for 1 second
+       if (answer == choice) {
+        setCorrectAnswer(true);
+           } else {
+            setWrongAnswer(true);
+           }
        }
-   }
+
 
 
    useEffect(() => {
@@ -77,17 +72,24 @@ export function Trivia() {
 
            <div className="choices-grid">
                {choices.map((choice, index) => (
-                   <button  key={index} className="choice-box">
+                   <button onClick={() => {compareAnswer(choice); console.log(answer); console.log(choice); setIsAnswered(true)}}key={index} disabled={isAnswered} className="choice-box">
                        {choice}
                    </button>
                ))}
-           </div>
+           </div> 
+           <div className="answer-buttons-container">
+            {correctAnswer && (
+            <button className="correct-button">Correct Answer</button> ) }
+            {wrongAnswer && (
+            <button className="wrong-button">Wrong Answer</button>
+            )}
+            </div>
 
 
            {/* New "Next Question" Button */}
            {count !== 10 ? (
                <div className="next-button-container">
-                   <button onClick={() => { fetchQuestionInformation(); updateCount(); }} className="next-button">Next Question</button>
+                   <button onClick={() => { fetchQuestionInformation(); updateCount(); setCorrectAnswer(false); setWrongAnswer(false); setIsAnswered(false); }} className="next-button">Next Question</button>
                </div>
            ) : (
                <div className="next-button-container">
