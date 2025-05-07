@@ -18,7 +18,7 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
-public class TestTriviaHandler implements Route {
+public class DailyTriviaHandler implements Route {
 
   private static final String API_KEY = System.getenv("OPEN_API_KEY");
   private static final String API_URL = "https://api.openai.com/v1/chat/completions";
