@@ -11,6 +11,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import okhttp3.*;
@@ -37,6 +38,9 @@ public class TriviaQuestionHandler implements Route {
         Types.newParameterizedType(Map.class, String.class, Object.class, List.class);
     JsonAdapter<Map<String, Object>> adapter = moshi.adapter(mapStringObject);
     Map<String, Object> responseMap = new HashMap<>();
+    ArrayList<Object> questionsList = new ArrayList<>();
+    HashSet<String> seenQuestions = new HashSet<>();
+
     String elo = request.queryParams("elo");
     String topic = request.queryParams("topic");
 
@@ -46,7 +50,7 @@ public class TriviaQuestionHandler implements Route {
     }
 
     // Parse elo value
-    Number eloRanking;
+    Double eloRanking;
     try {
       eloRanking = Double.parseDouble(elo);
     } catch (NumberFormatException e) {
@@ -59,84 +63,94 @@ public class TriviaQuestionHandler implements Route {
     difficultyLevel.put(50, "Medium");
     difficultyLevel.put(100, "Hard");
     difficultyLevel.put(200, "Very Hard");
-    difficultyLevel.put(500, "Expert");
-
-    String level = getDifficultyLevel(difficultyLevel, eloRanking);
+    difficultyLevel.put(300, "Expert");
 
     OkHttpClient client = new OkHttpClient();
+    while (questionsList.size() < 10) {
+      eloRanking = eloRanking + 50;
+      String level = getDifficultyLevel(difficultyLevel, eloRanking);
 
-    String prompt =
-        """
-      Generate one trivia question in JSON format with these fields:
+      String prompt =
+          """
+      Generate  different trivia question in JSON format with these fields:
       {
         "question": "string",
         "options": ["A: Option", "B: Option", "C: Option", "D: Option"],
         "answer": "Correct option from above"
       } """
-            + "make the question of difficulty "
-            + level
-            + " make the question of topic "
-            + topic;
+              + "make the question of difficulty "
+              + level
+              + " make the question of topic "
+              + topic;
 
-    JsonObject message = new JsonObject();
-    message.addProperty("role", "user");
-    message.addProperty("content", prompt);
+      JsonObject message = new JsonObject();
+      message.addProperty("role", "user");
+      message.addProperty("content", prompt);
 
-    JsonArray messages = new JsonArray();
-    messages.add(message);
+      JsonArray messages = new JsonArray();
+      messages.add(message);
 
-    JsonObject requestBody = new JsonObject();
-    requestBody.addProperty("model", "gpt-3.5-turbo");
-    requestBody.add("messages", messages);
+      JsonObject requestBody = new JsonObject();
+      requestBody.addProperty("model", "gpt-3.5-turbo");
+      requestBody.add("messages", messages);
 
-    okhttp3.Request apiRequest =
-        new okhttp3.Request.Builder()
-            .url(API_URL)
-            .addHeader("Authorization", "Bearer " + API_KEY)
-            .addHeader("Content-Type", "application/json")
-            .post(RequestBody.create(requestBody.toString(), MediaType.parse("application/json")))
-            .build();
+      okhttp3.Request apiRequest =
+          new okhttp3.Request.Builder()
+              .url(API_URL)
+              .addHeader("Authorization", "Bearer " + API_KEY)
+              .addHeader("Content-Type", "application/json")
+              .post(RequestBody.create(requestBody.toString(), MediaType.parse("application/json")))
+              .build();
 
-    try (okhttp3.Response apiResponse = client.newCall(apiRequest).execute()) {
-      if (!apiResponse.isSuccessful()) {
-        String errorMessage =
-            "API error: " + apiResponse.code() + " - " + apiResponse.body().string();
-        System.out.println(errorMessage); // Log the API response error
+      try (okhttp3.Response apiResponse = client.newCall(apiRequest).execute()) {
+        if (!apiResponse.isSuccessful()) {
+          String errorMessage =
+              "API error: " + apiResponse.code() + " - " + apiResponse.body().string();
+          System.out.println(errorMessage); // Log the API response error
+          responseMap.put("result", "error");
+          responseMap.put("error", errorMessage);
+          break;
+        } else {
+          String responseBody = apiResponse.body().string();
+
+          JsonObject json = JsonParser.parseString(responseBody).getAsJsonObject();
+          String content =
+              json.getAsJsonArray("choices")
+                  .get(0)
+                  .getAsJsonObject()
+                  .getAsJsonObject("message")
+                  .get("content")
+                  .getAsString();
+
+          // Extract the trivia question, options, and answer from the API response content
+          String question = extractField(content, "question");
+          if (seenQuestions.contains(question)) {
+            continue;
+          }
+          String options = extractField(content, "options");
+          String answer = extractField(content, "answer");
+
+          String[] choices =
+              options
+                  .substring(1, options.length() - 1)
+                  .split(", "); // This is removed, as it's handled now
+          Map<String, Object> questionMap = new HashMap<>();
+
+          questionMap.put("question", question);
+          questionMap.put("options", choices); // `options` now contains the cleaned list of options
+          questionMap.put("answer", answer);
+          questionsList.add(questionMap);
+        }
+
+      } catch (IOException e) {
+        e.printStackTrace(); // Print stack trace for debugging
         responseMap.put("result", "error");
-        responseMap.put("error", errorMessage);
-      } else {
-        String responseBody = apiResponse.body().string();
-
-        JsonObject json = JsonParser.parseString(responseBody).getAsJsonObject();
-        String content =
-            json.getAsJsonArray("choices")
-                .get(0)
-                .getAsJsonObject()
-                .getAsJsonObject("message")
-                .get("content")
-                .getAsString();
-
-        // Extract the trivia question, options, and answer from the API response content
-        String question = extractField(content, "question");
-        String options = extractField(content, "options");
-        String answer = extractField(content, "answer");
-
-        String[] choices =
-            options
-                .substring(1, options.length() - 1)
-                .split(", "); // This is removed, as it's handled now
-        responseMap.put("result", "success");
-        responseMap.put("question", question);
-        responseMap.put("options", choices); // `options` now contains the cleaned list of options
-        responseMap.put("answer", answer);
+        responseMap.put("error", "IOException: " + e.getMessage());
       }
-    } catch (IOException e) {
-      e.printStackTrace(); // Print stack trace for debugging
-      responseMap.put("result", "error");
-      responseMap.put("error", "IOException: " + e.getMessage());
     }
 
     // Serialize the Map into JSON response
+    responseMap.put("questions", questionsList);
     return adapter.toJson(responseMap);
   }
 

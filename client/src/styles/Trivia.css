@@ -84,3 +84,41 @@
 .next-button:hover {
     background-color: #0056b3;
 }
+
+
+.answer-buttons-container {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    justify-content: center;
+}
+
+.correct-button {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.correct-button:hover {
+    background-color: #218838;
+}
+
+.wrong-button {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.wrong-button:hover {
+    background-color: #c82333;
+}
