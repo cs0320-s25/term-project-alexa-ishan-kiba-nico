@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.time.LocalDate;
 import storage.RankedUser;
 import storage.StorageInterface;
 import storage.User;
@@ -27,6 +28,7 @@ public class Ranker {
   public List<RankedUser> rankUsers() throws Exception {
     List<User> sorted = sortUsers();
     List<RankedUser> rankedUsers = new ArrayList<RankedUser>();
+    LocalDate date = LocalDate.now();
     int currentRank = 1;
     int displayedRank = 1;
     int previousElo = 0;
@@ -38,9 +40,11 @@ public class Ranker {
         displayedRank = currentRank;
       }
 
-      rankedUsers.add(new RankedUser(displayedRank, user.getUsername(), user.getElo()));
-      currentRank++;
-      previousElo = user.getElo();
+      if (user.getDate().equals(date)) {
+        rankedUsers.add(new RankedUser(displayedRank, user.getUsername(), user.getElo()));
+        currentRank++;
+        previousElo = user.getElo();
+      }
     }
 
     return rankedUsers;
