@@ -2,9 +2,16 @@ package elo;
 
 // Used in simulating a match being played: for updating the elo system as necessary
 public class Match {
-
+  /**
+   * Makes calles to Player class to update player ratings as per the results of a match, simulating
+   * a match
+   *
+   * @param p1: the first player
+   * @param p2: the second player
+   * @param result
+   */
   public static void playMatch(Player p1, Player p2, int result) {
-    int k = 32;
+    int k = 32; // constant indicating the scale by which we want ratings updated. can be modified.
 
     double scoreP1 = result == 1 ? 1 : result == 0 ? 0 : 0.5;
     double scoreP2 = 1 - scoreP1;
