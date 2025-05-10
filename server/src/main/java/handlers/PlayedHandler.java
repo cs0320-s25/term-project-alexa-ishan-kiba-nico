@@ -30,7 +30,7 @@ public class PlayedHandler implements Route {
 
     if (uid == null || uid.isEmpty()) {
       responseMap.put("result", "failure");
-      responseMap.put("error", "Username is required");
+      responseMap.put("error", "uid is required");
       return adapter.toJson(responseMap);
     }
 
@@ -51,6 +51,8 @@ public class PlayedHandler implements Route {
         userData.put("played", true);
         this.storageHandler.addData(uid, userData);
         responseMap.put("result", "success");
+        responseMap.put("uid", uid);
+        responseMap.put("played", "true");
       }
 
     } catch (Exception e) {
