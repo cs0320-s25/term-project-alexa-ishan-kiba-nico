@@ -8,6 +8,7 @@ export function Trivia() {
     const [wrongAnswer, setWrongAnswer] = useState<Boolean>(false);
     const [isAnswered, setIsAnswered] = useState<boolean>(false);
     const [questions, setQuestions] = useState<Question[]>([]);
+    const [currentScore, setCurrentScore] = useState<string>("0");
     const navigate = useNavigate();
 
     type Question = {
@@ -15,6 +16,22 @@ export function Trivia() {
         answer: string;
         options: string[];
     };
+
+    async function fetchScore() {
+        try {
+            const response = await fetch(`http://localhost:3232/points?currentscore=${currentScore}&time=3`);
+            if (!response.ok) {
+                throw new Error("Failed to fetch score");
+            }
+            const data = await response.json();
+            if (data.result == "success") {
+                const stringScore = data.score;
+                setCurrentScore(stringScore)
+            }
+        } catch (error: any) {
+            console.log(error);
+        }
+    }
 
     async function fetchQuestionInformation() {
         try {
@@ -42,8 +59,10 @@ export function Trivia() {
     function compareAnswer(choice: string) {
         if (currentQuestion?.answer == choice) {
             setCorrectAnswer(true);
+            return true;
         } else {
             setWrongAnswer(true);
+            return false;
         }
     }
 
@@ -56,6 +75,7 @@ export function Trivia() {
     return (
         <div className="trivia-container">
             <div className="counter-display">{count + 1}/10</div>
+            <div className="score-box">Score: {currentScore}</div>
 
             {!currentQuestion ? (
                 <div>Loading...</div>
