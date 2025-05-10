@@ -54,12 +54,14 @@ public class UserHandler implements Route {
         if (!userData.get("date").equals(dateString)) {
           userData.put("elo", 0);
           userData.put("date", dateString);
+          userData.put("played", false);
         }
       } else {
         userData = new HashMap<>();
         userData.put("username", username);
         userData.put("elo", 0);
         userData.put("date", dateString);
+        userData.put("played", false);
       }
       this.storageHandler.addData(uid, userData);
       responseMap.put("result", "success");

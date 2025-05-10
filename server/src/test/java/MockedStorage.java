@@ -14,6 +14,10 @@ public class MockedStorage implements StorageInterface {
   public void addData(String uid, Map<String, Object> data) {}
 
   @Override
+  public void addCategoryData(String category, Map<String, Object> data) {
+  }
+
+  @Override
   public List<Map<String, Object>> getCollection(String uid, String collection_id)
       throws InterruptedException, ExecutionException {
     return List.of();

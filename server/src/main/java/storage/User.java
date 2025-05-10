@@ -5,14 +5,17 @@ import java.time.LocalDate;
 public class User {
   private String username;
   private int elo;
-  private LocalDate date;
+  private String date;
+  private Boolean played;
 
   public User() {}
 
-  public User(String username, int elo, LocalDate date) {
+  public User(String username, int elo, String date, Boolean played) {
     this.username = username;
     this.elo = elo;
     this.date = date;
+    this.played = played;
+
   }
 
   public String getUsername() {
@@ -31,11 +34,19 @@ public class User {
     this.elo = elo;
   }
 
-  public LocalDate getDate() {
+  public String getDate() {
     return date;
   }
 
-  public void setDate(LocalDate date) {
+  public void setDate(String date) {
     this.date = date;
+  }
+
+  public Boolean getPlayed() {
+    return played;
+  }
+
+  public void setPlayed(Boolean played) {
+    this.played = played;
   }
 }

@@ -10,6 +10,8 @@ public interface StorageInterface {
 
   void addData(String uid, Map<String, Object> data);
 
+  void addCategoryData(String category, Map<String, Object> data);
+
   List<Map<String, Object>> getCollection(String uid, String collection_id)
       throws InterruptedException, ExecutionException;
 
