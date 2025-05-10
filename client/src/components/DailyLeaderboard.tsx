@@ -17,7 +17,7 @@ export function DailyLeaderboard() {
     if (user?.username) {
         getDailyLeaderboard(user.username).then((json) => {
             if (json.result === "success") {
-                setDailyLeaderboardData(json.leaderboard)
+              setDailyLeaderboardData(json.leaderboard)
             }
         })
     }

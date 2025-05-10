@@ -4,7 +4,9 @@ import static spark.Spark.after;
 
 import handlers.DailyLeaderboardHandler;
 import handlers.DailyTriviaHandler;
+import handlers.PlayedHandler;
 import handlers.PointsHandler;
+import handlers.TopicHandler;
 import handlers.TopicLeaderboardHandler;
 import handlers.TriviaQuestionHandler;
 import handlers.UserHandler;
@@ -38,6 +40,8 @@ public class Server {
       Spark.get("/points", new PointsHandler(firebaseUtils));
       Spark.get("/question", new TriviaQuestionHandler(firebaseUtils));
       Spark.get("/daily", new DailyTriviaHandler());
+      Spark.get("/played", new PlayedHandler(firebaseUtils));
+      Spark.get("/topic", new TopicHandler(firebaseUtils));
 
       Spark.init();
       Spark.awaitInitialization();

@@ -28,7 +28,7 @@ public class Ranker {
   public List<RankedUser> rankUsers() throws Exception {
     List<User> sorted = sortUsers();
     List<RankedUser> rankedUsers = new ArrayList<RankedUser>();
-    LocalDate date = LocalDate.now();
+    String date = LocalDate.now().toString();
     int currentRank = 1;
     int displayedRank = 1;
     int previousElo = 0;

@@ -37,15 +37,15 @@ public class TopicLeaderboardHandler implements Route {
       for (String category : categories) {
         Map<String, Object> categoryData = this.storageHandler.getCategoryData(category);
         Object userObj = categoryData.get("username");
-        Object questionsCorrectObj = categoryData.get("questions");
-        if (userObj == null || questionsCorrectObj == null) {
+        Object streakObj = categoryData.get("streak");
+        if (userObj == null || streakObj == null) {
           continue;
         }
 
-        if (userObj instanceof String && questionsCorrectObj instanceof Number) {
+        if (userObj instanceof String && streakObj instanceof Number) {
           String user = userObj.toString();
-          int questionsCorrect = ((Number) questionsCorrectObj).intValue();
-          leaderboard.add(new Category(category, user, questionsCorrect));
+          int streak = ((Number) streakObj).intValue();
+          leaderboard.add(new Category(category, user, streak));
         }
 
         responseMap.put("result", "success");
