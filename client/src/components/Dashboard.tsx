@@ -5,7 +5,7 @@ export function Dashboard() {
     return (
         <div>
             <Link to="/trivia">
-                <button>Daily Game</button>
+                <button >Daily Game</button>
             </Link>
         </div>
     )

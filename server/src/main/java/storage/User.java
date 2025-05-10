@@ -1,7 +1,5 @@
 package storage;
 
-import java.time.LocalDate;
-
 public class User {
   private String username;
   private int elo;
@@ -15,7 +13,6 @@ public class User {
     this.elo = elo;
     this.date = date;
     this.played = played;
-
   }
 
   public String getUsername() {

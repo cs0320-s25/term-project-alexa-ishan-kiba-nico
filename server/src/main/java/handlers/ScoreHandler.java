@@ -20,7 +20,7 @@ public class ScoreHandler implements Route {
   }
 
   @Override
-  public Object handle (Request request, Response response) {
+  public Object handle(Request request, Response response) {
     String uid = request.queryParams("uid");
     String score = request.queryParams("score");
     Moshi moshi = new Moshi.Builder().build();

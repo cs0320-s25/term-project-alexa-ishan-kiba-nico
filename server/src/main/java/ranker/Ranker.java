@@ -1,10 +1,10 @@
 package ranker;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.time.LocalDate;
 import storage.RankedUser;
 import storage.StorageInterface;
 import storage.User;

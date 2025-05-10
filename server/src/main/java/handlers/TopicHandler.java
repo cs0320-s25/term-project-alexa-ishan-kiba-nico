@@ -26,9 +26,11 @@ public class TopicHandler implements Route {
   public static String toTitleCase(String input) {
     if (input == null || input.isEmpty()) return input;
     return Arrays.stream(input.split(" "))
-        .map(word -> word.length() > 1
-            ? word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase()
-            : word.toUpperCase())
+        .map(
+            word ->
+                word.length() > 1
+                    ? word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase()
+                    : word.toUpperCase())
         .collect(Collectors.joining(" "));
   }
 
@@ -54,44 +56,46 @@ public class TopicHandler implements Route {
       return adapter.toJson(responseMap);
     }
 
-     try {
-       List<String> categories = new ArrayList<>(this.storageHandler.getAllCategories());
-       String categoryName = toTitleCase(category);
-       if (categories.contains(categoryName)) {
-         Map<String, Object> categoryData = this.storageHandler.getCategoryData(categoryName);
-         Object currentStreakObj = this.storageHandler.getCategoryData(categoryName).get("questions");
+    try {
+      List<String> categories = new ArrayList<>(this.storageHandler.getAllCategories());
+      String categoryName = toTitleCase(category);
+      if (categories.contains(categoryName)) {
+        Map<String, Object> categoryData = this.storageHandler.getCategoryData(categoryName);
+        Object currentStreakObj =
+            this.storageHandler.getCategoryData(categoryName).get("questions");
 
-         if (currentStreakObj instanceof Number) {
-           int currentStreak = ((Number) currentStreakObj).intValue();
+        if (currentStreakObj instanceof Number) {
+          int currentStreak = ((Number) currentStreakObj).intValue();
 
-           if (currentStreak < Integer.parseInt(streak)) {
-             categoryData.put("username", username);
-             categoryData.put("streak", streak);
-             this.storageHandler.addCategoryData(categoryName, categoryData);
-           }
+          if (currentStreak < Integer.parseInt(streak)) {
+            categoryData.put("username", username);
+            categoryData.put("streak", streak);
+            this.storageHandler.addCategoryData(categoryName, categoryData);
+          }
 
-           if (currentStreak == Integer.parseInt(streak)) {
-             String currentUser = this.storageHandler.getCategoryData(categoryName).get("username").toString();
-             categoryData.put("username", currentUser + ", " + username);
-             this.storageHandler.addCategoryData(categoryName, categoryData);
-           }
-         }
+          if (currentStreak == Integer.parseInt(streak)) {
+            String currentUser =
+                this.storageHandler.getCategoryData(categoryName).get("username").toString();
+            categoryData.put("username", currentUser + ", " + username);
+            this.storageHandler.addCategoryData(categoryName, categoryData);
+          }
+        }
 
-       } else {
-         Map <String, Object> categoryData = new HashMap<>();
-         categoryData.put("username", username);
-         categoryData.put("streak", streak);
-         this.storageHandler.addCategoryData(categoryName, categoryData);
-       }
+      } else {
+        Map<String, Object> categoryData = new HashMap<>();
+        categoryData.put("username", username);
+        categoryData.put("streak", streak);
+        this.storageHandler.addCategoryData(categoryName, categoryData);
+      }
 
-       responseMap.put("result", "success");
-       responseMap.put("category", categoryName);
-     } catch (Exception e) {
-       e.printStackTrace();
-       responseMap.put("result", "failure");
-       responseMap.put("error", e.getMessage());
-     }
+      responseMap.put("result", "success");
+      responseMap.put("category", categoryName);
+    } catch (Exception e) {
+      e.printStackTrace();
+      responseMap.put("result", "failure");
+      responseMap.put("error", e.getMessage());
+    }
 
-     return adapter.toJson(responseMap);
+    return adapter.toJson(responseMap);
   }
 }

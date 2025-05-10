@@ -144,7 +144,8 @@ public class FirebaseUtilities implements StorageInterface {
   }
 
   @Override
-  public void addCategoryData(String category, Map<String, Object> data) throws IllegalArgumentException {
+  public void addCategoryData(String category, Map<String, Object> data)
+      throws IllegalArgumentException {
     if (category == null || data == null) {
       throw new IllegalArgumentException("addDocument: uid or data cannot be null");
     }
