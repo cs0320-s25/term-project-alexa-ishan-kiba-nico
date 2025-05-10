@@ -159,7 +159,7 @@ export function Trivia() {
                             </div>}
                     </div>
 
-                    {count < 9 ? (
+                    {count < 9 && isAnswered? (
                         <div className="next-button-container">
                             <button
                                 onClick={() => {
