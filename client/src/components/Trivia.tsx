@@ -152,7 +152,11 @@ export function Trivia() {
 
                     <div className="answer-buttons-container">
                         {correctAnswer && <button className="correct-button">Correct Answer</button>}
-                        {wrongAnswer && <button className="wrong-button">Wrong Answer</button>}
+                        {wrongAnswer && 
+                            <div>
+                            <button className="wrong-button">Wrong Answer</button>
+                            <p>The correct answer is {currentQuestion.answer}</p>
+                            </div>}
                     </div>
 
                     {count < 9 ? (
