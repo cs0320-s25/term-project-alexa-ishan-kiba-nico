@@ -40,4 +40,13 @@ export async function addDailyScore(uid: string, score: string) {
   });
 }
 
+export async function updatePlayerStatus(uid: string, played: string) {
+  return await queryAPI("played", {
+    uid: uid,
+    played: played
+  })
+}
+
+
+
 

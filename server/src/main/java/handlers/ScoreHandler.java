@@ -43,7 +43,7 @@ public class ScoreHandler implements Route {
     try {
       Integer scoreInt = Integer.parseInt(score);
       Map<String, Object> userData = this.storageHandler.getData(uid);
-      userData.put("score", scoreInt);
+      userData.put("elo", scoreInt);
       this.storageHandler.addData(uid, userData);
       responseMap.put("result", "success");
       responseMap.put("uid", uid);

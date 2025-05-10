@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import '../styles/Trivia.css';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '@clerk/clerk-react';
-import { addDailyScore } from '../utils/api';
+import { addDailyScore, updatePlayerStatus } from '../utils/api';
 
 
 export function Trivia() {
@@ -184,11 +184,13 @@ export function Trivia() {
                         </div>
                     ) : (
                         <div className="next-button-container">
-                            <button onClick={() => {
-                                returnToHome()
+                            <button onClick={async () => {
+                                
                                 if (user?.id) {
-                                addDailyScore(user?.id, currentScore)
+                                await addDailyScore(user?.id, currentScore)
+                                await updatePlayerStatus(user?.id, "true")
                                 }
+                                returnToHome()
 
                             }}  className="next-button">
                                 Return Home
