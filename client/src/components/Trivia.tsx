@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import '../styles/Trivia.css';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '@clerk/clerk-react';
-import { addDailyScore, updatePlayerStatus } from '../utils/api';
+import { addDailyScore } from '../utils/api';
 
 
 export function Trivia() {
@@ -99,7 +99,8 @@ export function Trivia() {
             setTimeLeft((prev) => {
                 if (prev <= 1) {
                     clearInterval(timerRef.current!);
-                    setIsAnswered(true); 
+                    setIsAnswered(true);
+                    setWrongAnswer(true); 
                     return 0;
                 } 
             
