@@ -140,12 +140,12 @@ export function Trivia() {
                     <div className="choices-grid">
                         {currentQuestion.options.map((choice, index) => (
                             <button
-                                onClick={() => {
+                                onClick={async () => {
                                     stopTimer();
                                     compareAnswer(choice);
                                     setIsAnswered(true);
                                     if (compareAnswer(choice)) {
-                                        fetchScore();
+                                        await fetchScore();
                                     }
                                     
                                 }
