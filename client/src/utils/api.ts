@@ -45,6 +45,15 @@ export async function updatePlayerStatus(uid: string, played: string) {
     uid: uid,
     played: played
   })
+
+}
+
+export async function checkPlayerStatus(uid: string) {
+  const response = await queryAPI("played", {
+    uid: uid
+  }
+)
+  return response.result == "true"
 }
 
 
