@@ -187,8 +187,8 @@ export function Trivia() {
                             <button onClick={async () => {
                                 
                                 if (user?.id) {
-                                await addDailyScore(user?.id, currentScore)
-                                await updatePlayerStatus(user?.id, "true")
+                                await fetchScore();
+                                await addDailyScore(user?.id, currentScore);
                                 }
                                 returnToHome()
 
