@@ -1,4 +1,4 @@
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { checkPlayerStatus, updatePlayerStatus } from "../utils/api";
 import { useUser } from "@clerk/clerk-react";
 
