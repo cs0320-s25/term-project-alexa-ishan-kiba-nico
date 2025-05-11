@@ -20,7 +20,7 @@ public class ScoreHandler implements Route {
   }
 
   @Override
-  public Object handle (Request request, Response response) {
+  public Object handle(Request request, Response response) {
     String uid = request.queryParams("uid");
     String score = request.queryParams("score");
     Moshi moshi = new Moshi.Builder().build();
@@ -43,7 +43,7 @@ public class ScoreHandler implements Route {
     try {
       Integer scoreInt = Integer.parseInt(score);
       Map<String, Object> userData = this.storageHandler.getData(uid);
-      userData.put("score", scoreInt);
+      userData.put("elo", scoreInt);
       this.storageHandler.addData(uid, userData);
       responseMap.put("result", "success");
       responseMap.put("uid", uid);

@@ -32,3 +32,30 @@ export async function getDailyLeaderboard(username: string) {
 export async function getTopicLeaderboard() {
   return await queryAPI("topicleaderboard", {});
 }
+
+export async function addDailyScore(uid: string, score: string) {
+  return await queryAPI("score", {
+    uid: uid,
+    score: score
+  });
+}
+
+export async function updatePlayerStatus(uid: string, played: string) {
+  return await queryAPI("played", {
+    uid: uid,
+    played: played
+  })
+
+}
+
+export async function checkPlayerStatus(uid: string) {
+  const response = await queryAPI("played", {
+    uid: uid
+  }
+)
+  return response.result == "true"
+}
+
+
+
+

@@ -1,6 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import '../styles/Trivia.css';
 import { useNavigate } from 'react-router-dom';
+import { useUser } from '@clerk/clerk-react';
+import { addDailyScore, updatePlayerStatus } from '../utils/api';
+
 
 export function Trivia() {
     const [count, setCount] = useState<number>(0);
@@ -12,7 +15,11 @@ export function Trivia() {
     const [timeLeft, setTimeLeft] = useState<number>(10);
     const [timeElasped, setTimeElapsed] = useState<number>(0);
     const timerRef = useRef<NodeJS.Timeout | null>(null);
+    const { user } = useUser();
     const navigate = useNavigate();
+    
+
+
 
     type Question = {
         question: string;
@@ -35,6 +42,8 @@ export function Trivia() {
             console.log(error);
         }
     }
+    
+    
 
     
       
@@ -175,7 +184,15 @@ export function Trivia() {
                         </div>
                     ) : (
                         <div className="next-button-container">
-                            <button onClick={returnToHome} className="next-button">
+                            <button onClick={async () => {
+                                
+                                if (user?.id) {
+                                await addDailyScore(user?.id, currentScore)
+                                await updatePlayerStatus(user?.id, "true")
+                                }
+                                returnToHome()
+
+                            }}  className="next-button">
                                 Return Home
                             </button>
                         </div>
