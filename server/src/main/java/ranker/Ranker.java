@@ -1,10 +1,10 @@
 package ranker;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.time.LocalDate;
 import storage.RankedUser;
 import storage.StorageInterface;
 import storage.User;
@@ -28,7 +28,7 @@ public class Ranker {
   public List<RankedUser> rankUsers() throws Exception {
     List<User> sorted = sortUsers();
     List<RankedUser> rankedUsers = new ArrayList<RankedUser>();
-    LocalDate date = LocalDate.now();
+    String date = LocalDate.now().toString();
     int currentRank = 1;
     int displayedRank = 1;
     int previousElo = 0;
