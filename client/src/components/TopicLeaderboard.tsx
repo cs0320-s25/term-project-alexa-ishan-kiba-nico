@@ -28,7 +28,7 @@ export function TopicLeaderboard() {
   useEffect(() => {
     getTopicLeaderboard().then((json) => {
         if (json.result === "success") {
-            setTopicLeaderboardData(json.leaderboard);
+            setTopicLeaderboardData(json.leaderboard)
         }
     });
   }, []);

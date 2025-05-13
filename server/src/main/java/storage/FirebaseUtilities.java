@@ -144,6 +144,22 @@ public class FirebaseUtilities implements StorageInterface {
   }
 
   @Override
+  public void addCategoryData(String category, Map<String, Object> data)
+      throws IllegalArgumentException {
+    if (category == null || data == null) {
+      throw new IllegalArgumentException("addDocument: uid or data cannot be null");
+    }
+    // adds new data for user 'uid'
+
+    Firestore db = FirestoreClient.getFirestore();
+    // 1: Get a ref to the collection that you created
+    DocumentReference dataRef = db.collection("topics").document(category);
+
+    // 2: Write data to the collection ref
+    dataRef.set(data);
+  }
+
+  @Override
   public List<String> getAllUserIds() throws InterruptedException, ExecutionException {
     Firestore db = FirestoreClient.getFirestore();
 
