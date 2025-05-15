@@ -6,6 +6,7 @@ import handlers.DailyLeaderboardHandler;
 import handlers.DailyTriviaHandler;
 import handlers.PlayedHandler;
 import handlers.PointsHandler;
+import handlers.RandomWordHandler;
 import handlers.ScoreHandler;
 import handlers.TopicHandler;
 import handlers.TopicLeaderboardHandler;
@@ -44,6 +45,7 @@ public class Server {
       Spark.get("/played", new PlayedHandler(firebaseUtils));
       Spark.get("/topic", new TopicHandler(firebaseUtils));
       Spark.get("/score", new ScoreHandler(firebaseUtils));
+      Spark.get("/randomword", new RandomWordHandler(firebaseUtils));
 
       Spark.init();
       Spark.awaitInitialization();
