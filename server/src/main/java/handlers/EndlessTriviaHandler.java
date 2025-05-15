@@ -19,18 +19,45 @@ import spark.Response;
 import spark.Route;
 import storage.StorageInterface;
 
+/**
+ * EndlessTriviaHandler is a Spark route that generates trivia questions using the OpenAI API. Given
+ * a topic via a query parameter, it returns a JSON-formatted trivia question with options and an
+ * answer. This class uses the GPT-3.5-turbo model to generate the trivia content.
+ */
 public class EndlessTriviaHandler implements Route {
 
   private static final String API_KEY = System.getenv("OPEN_API_KEY");
   private static final String API_URL = "https://api.openai.com/v1/chat/completions";
   private StorageInterface storageInterface;
 
+  /**
+   * Constructs an EndlessTriviaHandler with a given storage interface.
+   *
+   * @param storageInterface an implementation of StorageInterface, for possible future use (e.g.,
+   *     tracking questions, answers).
+   */
   public EndlessTriviaHandler(StorageInterface storageInterface) {
     this.storageInterface = storageInterface;
   }
 
+  /**
+   * Handles incoming HTTP requests to generate a trivia question. Expects a "topic" query
+   * parameter, calls the OpenAI API, and returns a JSON object with the question, options, and
+   * answer.
+   *
+   * @param request the Spark request object
+   * @param response the Spark response object
+   * @return a JSON string containing the trivia question or an error message
+   */
   @Override
   public Object handle(Request request, Response response) {
+
+    // using moshi to serialize the response map
+    Map<String, Object> responseMap = new HashMap<>();
+    Moshi moshi = new Moshi.Builder().build();
+    Type mapStringObject =
+        Types.newParameterizedType(Map.class, String.class, Object.class, List.class);
+    JsonAdapter<Map<String, Object>> adapter = moshi.adapter(mapStringObject);
     try {
       String topic = request.queryParams("topic");
 
@@ -39,13 +66,7 @@ public class EndlessTriviaHandler implements Route {
         return "Missing required query parameters: 'topic'";
       }
 
-      Moshi moshi = new Moshi.Builder().build();
-      Type mapStringObject =
-          Types.newParameterizedType(Map.class, String.class, Object.class, List.class);
-      JsonAdapter<Map<String, Object>> adapter = moshi.adapter(mapStringObject);
-
-      Map<String, Object> responseMap = new HashMap<>();
-
+      // prompts the open ai api for a well formatted trivia question
       String prompt =
           """
           Generate a challenging unique trivia question in the following JSON format:
@@ -59,6 +80,7 @@ public class EndlessTriviaHandler implements Route {
               + topic
               + ".\n";
 
+      // Building the api request
       OkHttpClient client = new OkHttpClient();
 
       JsonObject message = new JsonObject();
@@ -80,6 +102,7 @@ public class EndlessTriviaHandler implements Route {
               .post(RequestBody.create(requestBody.toString(), MediaType.parse("application/json")))
               .build();
 
+      // processing the api response
       try (okhttp3.Response apiResponse = client.newCall(apiRequest).execute()) {
         if (!apiResponse.isSuccessful()) {
           System.out.println(
@@ -104,11 +127,13 @@ public class EndlessTriviaHandler implements Route {
           JsonArray options = questionObj.getAsJsonArray("options");
           String answer = questionObj.get("answer").getAsString();
 
+          // parsing the potential into an array of strings
           List<String> choices = new ArrayList<>();
           for (JsonElement opt : options) {
             choices.add(opt.getAsString());
           }
 
+          // formatting the parts of a question into a response map
           Map<String, Object> questionMap = new HashMap<>();
           questionMap.put("question", question);
           questionMap.put("options", choices);
@@ -117,18 +142,23 @@ public class EndlessTriviaHandler implements Route {
           responseMap.put("question", questionMap);
           responseMap.put("result", "success");
         }
+
+        // error handling
       } catch (IOException e) {
         e.printStackTrace();
         response.status(500);
-        return "IOException occurred. See server logs.";
+        responseMap.put("result", "error");
+        responseMap.put("message", e.getMessage());
       }
-
-      return adapter.toJson(responseMap);
 
     } catch (Exception e) {
       e.printStackTrace();
       response.status(500);
-      return "Internal Server Error: " + e.getMessage();
+      responseMap.put("result", "error");
+      responseMap.put("message", e.getMessage());
     }
+
+    // return serialized response map using moshi
+    return adapter.toJson(responseMap);
   }
 }
