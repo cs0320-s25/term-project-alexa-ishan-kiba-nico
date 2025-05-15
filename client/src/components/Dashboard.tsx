@@ -7,7 +7,7 @@ export function Dashboard() {
     const userId = user?.id
     const navigate = useNavigate();
 
-    const handleClick = async () => {
+    const playDailyTriva = async () => {
         if (userId) {
             const hasPlayed = false;
             // const hasPlayed = await checkPlayerStatus(userId)
@@ -23,10 +23,17 @@ export function Dashboard() {
             }
     }
 
+    const playEndlessTrivia = async () => {
+        navigate("/endless");
+    }
+
+    
+
 
     return (
         <div>
-            <button onClick={handleClick}>Daily Game</button>
+            <button onClick={playDailyTriva}>Daily Game</button>
+            <button onClick={playEndlessTrivia}>Endless mode</button>
         </div>
     )
 }
