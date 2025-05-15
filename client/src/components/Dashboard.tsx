@@ -9,8 +9,7 @@ export function Dashboard() {
 
     const playDailyTriva = async () => {
         if (userId) {
-            const hasPlayed = false;
-            // const hasPlayed = await checkPlayerStatus(userId)
+            const hasPlayed = await checkPlayerStatus(userId)
             console.log(hasPlayed)
             if (hasPlayed) {
                 
