@@ -90,6 +90,6 @@ public class RandomWordHandler implements Route {
       responseMap.put("result", "error");
       responseMap.put("message", e.getMessage());
     }
-    return responseMap;
+    return adapter.toJson(responseMap);
   }
 }
