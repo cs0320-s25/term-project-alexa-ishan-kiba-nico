@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useUser } from "@clerk/clerk-react";
-import { Question } from "./Trivia";
+import { Question } from "./DailyTrivia";
 import { addTopicScore } from "../utils/api";
 import { useNavigate } from "react-router-dom";
 
