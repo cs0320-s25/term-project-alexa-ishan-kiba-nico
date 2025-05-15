@@ -56,6 +56,19 @@ export async function checkPlayerStatus(uid: string) {
   return response.result == "true"
 }
 
+export async function addTopicScore(category: string, username: string, streak: string) {
+  return await queryAPI("topic", {
+    category: category,
+    username: username,
+    streak: streak,
+  })
+}
+
+export async function getDailyWord() {
+  const response = await queryAPI("random", {});
+  return response.word;
+}
+
 
 
 

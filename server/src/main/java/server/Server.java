@@ -4,13 +4,13 @@ import static spark.Spark.after;
 
 import handlers.DailyLeaderboardHandler;
 import handlers.DailyTriviaHandler;
+import handlers.EndlessTriviaHandler;
 import handlers.PlayedHandler;
 import handlers.PointsHandler;
 import handlers.RandomWordHandler;
 import handlers.ScoreHandler;
 import handlers.TopicHandler;
 import handlers.TopicLeaderboardHandler;
-import handlers.TriviaQuestionHandler;
 import handlers.UserHandler;
 import java.io.IOException;
 import spark.Spark;
@@ -40,7 +40,7 @@ public class Server {
       Spark.get("/topicleaderboard", new TopicLeaderboardHandler(firebaseUtils));
       Spark.get("/user", new UserHandler(firebaseUtils));
       Spark.get("/points", new PointsHandler(firebaseUtils));
-      Spark.get("/question", new TriviaQuestionHandler(firebaseUtils));
+      Spark.get("/endless", new EndlessTriviaHandler(firebaseUtils));
       Spark.get("/daily", new DailyTriviaHandler(firebaseUtils));
       Spark.get("/played", new PlayedHandler(firebaseUtils));
       Spark.get("/topic", new TopicHandler(firebaseUtils));

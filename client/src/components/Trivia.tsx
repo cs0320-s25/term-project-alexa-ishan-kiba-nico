@@ -4,7 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import { useUser } from '@clerk/clerk-react';
 import { addDailyScore } from '../utils/api';
 
-
+export type Question = {
+    question: string;
+    answer: string;
+    options: string[];
+};
 export function Trivia() {
     const [count, setCount] = useState<number>(0);
     const [correctAnswer, setCorrectAnswer] = useState<Boolean>(false);
@@ -22,11 +26,7 @@ export function Trivia() {
 
 
 
-    type Question = {
-        question: string;
-        answer: string;
-        options: string[];
-    };
+    
 
     async function fetchScore() {
         try {

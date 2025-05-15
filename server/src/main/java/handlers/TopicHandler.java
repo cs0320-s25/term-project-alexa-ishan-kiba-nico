@@ -62,8 +62,7 @@ public class TopicHandler implements Route {
       Integer streakInt = Integer.parseInt(streak);
       if (categories.contains(categoryName)) {
         Map<String, Object> categoryData = this.storageHandler.getCategoryData(categoryName);
-        Object currentStreakObj =
-            this.storageHandler.getCategoryData(categoryName).get("streak");
+        Object currentStreakObj = this.storageHandler.getCategoryData(categoryName).get("streak");
 
         if (currentStreakObj instanceof Number) {
           int currentStreak = ((Number) currentStreakObj).intValue();
