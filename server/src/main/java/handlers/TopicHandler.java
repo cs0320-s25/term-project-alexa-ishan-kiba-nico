@@ -59,17 +59,18 @@ public class TopicHandler implements Route {
     try {
       List<String> categories = new ArrayList<>(this.storageHandler.getAllCategories());
       String categoryName = toTitleCase(category);
+      Integer streakInt = Integer.parseInt(streak);
       if (categories.contains(categoryName)) {
         Map<String, Object> categoryData = this.storageHandler.getCategoryData(categoryName);
         Object currentStreakObj =
-            this.storageHandler.getCategoryData(categoryName).get("questions");
+            this.storageHandler.getCategoryData(categoryName).get("streak");
 
         if (currentStreakObj instanceof Number) {
           int currentStreak = ((Number) currentStreakObj).intValue();
 
-          if (currentStreak < Integer.parseInt(streak)) {
+          if (currentStreak < streakInt) {
             categoryData.put("username", username);
-            categoryData.put("streak", streak);
+            categoryData.put("streak", streakInt);
             this.storageHandler.addCategoryData(categoryName, categoryData);
           }
 
@@ -84,7 +85,7 @@ public class TopicHandler implements Route {
       } else {
         Map<String, Object> categoryData = new HashMap<>();
         categoryData.put("username", username);
-        categoryData.put("streak", streak);
+        categoryData.put("streak", streakInt);
         this.storageHandler.addCategoryData(categoryName, categoryData);
       }
 
