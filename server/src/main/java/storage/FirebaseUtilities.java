@@ -169,8 +169,7 @@ public class FirebaseUtilities implements StorageInterface {
   }
 
   @Override
-  public void addDailyWord(Map<String, Object> data)
-      throws IllegalArgumentException {
+  public void addDailyWord(Map<String, Object> data) throws IllegalArgumentException {
     if (data == null) {
       throw new IllegalArgumentException("addDocument: data cannot be null");
     }
