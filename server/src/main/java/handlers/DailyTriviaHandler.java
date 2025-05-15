@@ -19,12 +19,23 @@ import spark.Response;
 import spark.Route;
 import storage.StorageInterface;
 
+/**
+ * DailyTriviaHandler generates and serves daily trivia questions based on a specified topic.
+ *
+ * <p>If the requested topic is different from the previously stored topic, it fetches new questions
+ * from OpenAI's Chat Completions API. Otherwise, it returns cached questions.
+ */
 public class DailyTriviaHandler implements Route {
 
   private static final String API_KEY = System.getenv("OPEN_API_KEY");
   private static final String API_URL = "https://api.openai.com/v1/chat/completions";
   private StorageInterface storageInterface;
 
+  /**
+   * Constructs a new DailyTriviaHandler with a storage interface for caching daily questions.
+   *
+   * @param storageInterface interface used to store and retrieve trivia questions
+   */
   public DailyTriviaHandler(StorageInterface storageInterface) {
     this.storageInterface = storageInterface;
   }
@@ -33,11 +44,10 @@ public class DailyTriviaHandler implements Route {
   public Object handle(Request request, Response response) {
     try {
       String topic = request.queryParams("topic");
-      String elo = request.queryParams("elo");
 
-      if (topic == null || elo == null) {
+      if (topic == null) {
         response.status(400);
-        return "Missing required query parameters: 'elo' and/or 'topic'";
+        return "Missing required query parameters: 'topic'";
       }
 
       Map<String, Object> dailyQuestions = storageInterface.getDailyQuestions();
@@ -52,6 +62,8 @@ public class DailyTriviaHandler implements Route {
 
       Map<String, Object> responseMap = new HashMap<>();
 
+      // check if the topic matches the daily word if it doesn't generate ten new questions for new
+      // word
       if (dailyQuestions.get("word") == null
           || !dailyQuestions.get("word").toString().equals(topic)) {
         Map<String, Object> dailyQuestionsMap = new HashMap<>();
@@ -70,6 +82,8 @@ public class DailyTriviaHandler implements Route {
             Make each question based on the topic: """
                 + topic
                 + ".\n";
+
+        // build the response
 
         OkHttpClient client = new OkHttpClient();
 
@@ -93,6 +107,8 @@ public class DailyTriviaHandler implements Route {
                     RequestBody.create(requestBody.toString(), MediaType.parse("application/json")))
                 .build();
 
+        // process the response
+
         try (okhttp3.Response apiResponse = client.newCall(apiRequest).execute()) {
           if (!apiResponse.isSuccessful()) {
             System.out.println(
@@ -111,8 +127,12 @@ public class DailyTriviaHandler implements Route {
                     .get("content")
                     .getAsString();
 
+            // parse response as a json array to separate questions
+
             JsonArray questionsArray = JsonParser.parseString(content).getAsJsonArray();
             List<Map<String, Object>> questions = new ArrayList<>();
+
+            // build each question and put it into a question map
 
             for (JsonElement elem : questionsArray) {
               Map<String, Object> questionMap = new HashMap<>();
@@ -124,12 +144,17 @@ public class DailyTriviaHandler implements Route {
 
               List<String> choices = new ArrayList<>();
 
+              // convert the options for a question into a list of strings
               for (JsonElement opt : options) {
                 choices.add(opt.getAsString());
               }
+
+              // add all components to the question map
               questionMap.put("question", question);
               questionMap.put("options", choices);
               questionMap.put("answer", answer);
+
+              // add questionMap to array of questions
               questions.add(questionMap);
             }
             responseMap.put("questions", questions);
@@ -148,8 +173,7 @@ public class DailyTriviaHandler implements Route {
         responseMap.put("result", "success");
         responseMap.put("questions", dailyQuestions.get("questions"));
       }
-      System.out.println(dailyQuestions.get("word"));
-      System.out.println(topic);
+
       return adapter.toJson(responseMap);
 
     } catch (Exception e) {
