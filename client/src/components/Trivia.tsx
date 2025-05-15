@@ -69,7 +69,7 @@ export function Trivia() {
     async function fetchQuestionInformation() {
         try {
             const questionTopic = await fetchDailyTopic();
-            const response = await fetch(`http://localhost:3232/daily?elo=30&topic=${questionTopic}`);
+            const response = await fetch(`http://localhost:3232/daily?topic=${questionTopic}`);
             if (!response.ok) {
                 throw new Error("Failed to fetch question data");
             }

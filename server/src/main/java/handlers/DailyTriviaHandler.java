@@ -33,11 +33,10 @@ public class DailyTriviaHandler implements Route {
   public Object handle(Request request, Response response) {
     try {
       String topic = request.queryParams("topic");
-      String elo = request.queryParams("elo");
 
-      if (topic == null || elo == null) {
+      if (topic == null) {
         response.status(400);
-        return "Missing required query parameters: 'elo' and/or 'topic'";
+        return "Missing required query parameters: 'topic'";
       }
 
       Map<String, Object> dailyQuestions = storageInterface.getDailyQuestions();
