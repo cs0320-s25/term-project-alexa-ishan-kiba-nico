@@ -7,7 +7,7 @@ import '../styles/App.css'
 import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from '@clerk/clerk-react';
 import { DailyLeaderboard } from './DailyLeaderboard';
 import { TopicLeaderboard } from './TopicLeaderboard';
-import Trivia from './Trivia';
+import Trivia from './DailyTrivia';
 import { EndlessTrivia } from './EndlessTrivia';
 
 function MainApp() {
