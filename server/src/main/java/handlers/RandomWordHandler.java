@@ -19,6 +19,13 @@ import spark.Response;
 import spark.Route;
 import storage.StorageInterface;
 
+/**
+ * RandomWordHandler generates and returns a new random word for use in a trivia game.
+ *
+ * <p>It uses the OpenAI API to generate a word if one has not already been generated today. The
+ * word is stored with its associated date using the provided StorageInterface, ensuring the same
+ * word is returned throughout the day.
+ */
 public class RandomWordHandler implements Route {
   private static final String API_KEY = System.getenv("OPEN_API_KEY");
   private static final String API_URL = "https://api.openai.com/v1/chat/completions";
@@ -29,7 +36,14 @@ public class RandomWordHandler implements Route {
   }
 
   /**
-   * Invoked when a request is made on this route's corresponding path e.g. '/hello'
+   * Handles incoming GET requests and returns a random word.
+   *
+   * <p>- If a word hasn't been generated today, it uses the OpenAI API to create one. - Otherwise,
+   * it returns the stored word from earlier in the day.
+   *
+   * <p>The word is stored along with the current date to ensure daily consistency.
+   *
+   * <p>/** Invoked when a request is made on this route's corresponding path e.g. '/hello'
    *
    * @param request The request object providing information about the HTTP request
    * @param response The response object providing functionality for modifying the response
@@ -44,12 +58,16 @@ public class RandomWordHandler implements Route {
         Types.newParameterizedType(Map.class, String.class, Object.class, List.class);
     JsonAdapter<Map<String, Object>> adapter = moshi.adapter(mapStringObject);
     Map<String, Object> dailyWordMap = new HashMap<>();
+
+    // check if word was already generated for the day
     if (!storageInterface.getDailyWord().get("date").equals(LocalDate.now().toString())) {
 
+      // create the prompt for open ai api
       String prompt =
           "Please generate me a random word that I can use for a trivia game. Make "
               + "your response to just be the word";
 
+      // build the response
       OkHttpClient client = new OkHttpClient();
 
       JsonObject message = new JsonObject();
@@ -70,6 +88,8 @@ public class RandomWordHandler implements Route {
               .addHeader("Content-Type", "application/json")
               .post(RequestBody.create(requestBody.toString(), MediaType.parse("application/json")))
               .build();
+
+      // process the response
 
       try (okhttp3.Response apiResponse = client.newCall(apiRequest).execute()) {
         if (!apiResponse.isSuccessful()) {
@@ -94,14 +114,19 @@ public class RandomWordHandler implements Route {
           storageInterface.addDailyWord(dailyWordMap);
         }
 
+        // error checking
       } catch (Exception e) {
         responseMap.put("result", "error");
         responseMap.put("message", e.getMessage());
       }
     } else {
+
+      // if date in storage interface matches with current date, use the word for that date
       responseMap.put("result", "success");
       responseMap.put("word", storageInterface.getDailyWord().get("word"));
     }
+
+    // return a serialized response map
 
     return adapter.toJson(responseMap);
   }
