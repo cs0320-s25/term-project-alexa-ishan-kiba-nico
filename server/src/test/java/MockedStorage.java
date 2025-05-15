@@ -17,6 +17,11 @@ public class MockedStorage implements StorageInterface {
   public void addCategoryData(String category, Map<String, Object> data) {}
 
   @Override
+  public void addDailyWord(Map<String, Object> data) {
+
+  }
+
+  @Override
   public List<Map<String, Object>> getCollection(String uid, String collection_id)
       throws InterruptedException, ExecutionException {
     return List.of();
@@ -50,6 +55,11 @@ public class MockedStorage implements StorageInterface {
   @Override
   public Map<String, Object> getCategoryData(String category)
       throws InterruptedException, ExecutionException {
+    return Map.of();
+  }
+
+  @Override
+  public Map<String, Object> getDailyWord() throws InterruptedException, ExecutionException {
     return Map.of();
   }
 
