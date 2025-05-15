@@ -116,6 +116,15 @@ public class FirebaseUtilities implements StorageInterface {
   }
 
   @Override
+  public Map<String, Object> getDailyQuestions() throws InterruptedException, ExecutionException {
+    Firestore db = FirestoreClient.getFirestore();
+
+    DocumentReference docRef = db.collection("daily").document("questions");
+
+    return docRef.get().get().getData();
+  }
+
+  @Override
   public void addDocument(String uid, String collection_id, String doc_id, Map<String, Object> data)
       throws IllegalArgumentException {
     if (uid == null || collection_id == null || doc_id == null || data == null) {
@@ -169,8 +178,7 @@ public class FirebaseUtilities implements StorageInterface {
   }
 
   @Override
-  public void addDailyWord(Map<String, Object> data)
-      throws IllegalArgumentException {
+  public void addDailyWord(Map<String, Object> data) throws IllegalArgumentException {
     if (data == null) {
       throw new IllegalArgumentException("addDocument: data cannot be null");
     }
@@ -181,6 +189,17 @@ public class FirebaseUtilities implements StorageInterface {
     DocumentReference dataRef = db.collection("daily").document("word");
 
     // 2: Write data to the collection ref
+    dataRef.set(data);
+  }
+
+  @Override
+  public void addDailyQuestions(Map<String, Object> data) throws IllegalArgumentException {
+    if (data == null) {
+      throw new IllegalArgumentException("addDocument: data cannot be null");
+    }
+
+    Firestore db = FirestoreClient.getFirestore();
+    DocumentReference dataRef = db.collection("daily").document("questions");
     dataRef.set(data);
   }
 

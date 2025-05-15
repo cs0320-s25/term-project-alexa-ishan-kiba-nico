@@ -15,6 +15,7 @@ export function Trivia() {
     const [timeLeft, setTimeLeft] = useState<number>(10);
     const [timeElasped, setTimeElapsed] = useState<number>(0);
     const timerRef = useRef<NodeJS.Timeout | null>(null);
+    const [topic, setTopic] = useState<String>("")
     const { user } = useUser();
     const navigate = useNavigate();
     
@@ -42,6 +43,23 @@ export function Trivia() {
             console.log(error);
         }
     }
+
+    async function fetchDailyTopic() {
+        try {
+            const response = await fetch("http://localhost:3232/random");
+            if (!response.ok) {
+                throw new Error("Failed to fetch topic for today");
+            }
+            const data = await response.json();
+            if (data.result == "success") {
+                console.log(data.word);
+                return data.word;
+
+            }
+        } catch (error: any) {
+            console.log(error);
+        }
+    }
     
     
 
@@ -50,7 +68,8 @@ export function Trivia() {
 
     async function fetchQuestionInformation() {
         try {
-            const response = await fetch("http://localhost:3232/daily?elo=30&topic=NFL");
+            const questionTopic = await fetchDailyTopic();
+            const response = await fetch(`http://localhost:3232/daily?elo=30&topic=${questionTopic}`);
             if (!response.ok) {
                 throw new Error("Failed to fetch question data");
             }
@@ -81,7 +100,10 @@ export function Trivia() {
         }
     }
 
+
+
     useEffect(() => {
+        console.log("topic: " + topic);
         fetchQuestionInformation();
     }, []);
 
