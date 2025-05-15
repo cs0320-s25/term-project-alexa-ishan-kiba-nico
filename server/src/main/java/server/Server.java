@@ -45,7 +45,7 @@ public class Server {
       Spark.get("/played", new PlayedHandler(firebaseUtils));
       Spark.get("/topic", new TopicHandler(firebaseUtils));
       Spark.get("/score", new ScoreHandler(firebaseUtils));
-      Spark.get("/randomword", new RandomWordHandler(firebaseUtils));
+      Spark.get("/random", new RandomWordHandler(firebaseUtils));
 
       Spark.init();
       Spark.awaitInitialization();
