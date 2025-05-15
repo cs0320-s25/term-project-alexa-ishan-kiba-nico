@@ -23,185 +23,191 @@ export function Trivia() {
     options: string[];
   };
 
-  async function fetchScore() {
-    try {
-      const response = await fetch(`http://localhost:3232/points?currentscore=${currentScore}&time=${timeElasped}`);
-      if (!response.ok) throw new Error("Failed to fetch score");
-      const data = await response.json();
-      if (data.result === "success") {
-        setCurrentScore(data.score);
+    // Gets updated score from server based on elapsed time
+    async function fetchScore() {
+        try {
+          const response = await fetch(`http://localhost:3232/points?currentscore=${currentScore}&time=${timeElasped}`);
+          if (!response.ok) throw new Error("Failed to fetch score");
+          const data = await response.json();
+          if (data.result === "success") {
+            setCurrentScore(data.score);
+          }
+        } catch (error: any) {
+          console.log(error);
+        }
       }
-    } catch (error: any) {
-      console.log(error);
-    }
-  }
-
-  async function fetchQuestionInformation() {
-    try {
-      const response = await fetch("http://localhost:3232/daily?elo=30&topic=NFL");
-      if (!response.ok) throw new Error("Failed to fetch question data");
-      const data = await response.json();
-      if (data.result === "success") {
-        setQuestions(data.questions);
+    
+      // Loads trivia questions on first render
+      async function fetchQuestionInformation() {
+        try {
+          const response = await fetch("http://localhost:3232/daily?elo=30&topic=NFL");
+          if (!response.ok) throw new Error("Failed to fetch question data");
+          const data = await response.json();
+          if (data.result === "success") {
+            setQuestions(data.questions);
+          }
+        } catch (error: any) {
+          console.log(error);
+        }
       }
-    } catch (error: any) {
-      console.log(error);
-    }
-  }
-
-  function updateCount() {
-    setCount((count) => count + 1);
-  }
-
-  function returnToHome() {
-    navigate("/dashboard");
-  }
-
-  function compareAnswer(choice: string) {
-    if (currentQuestion?.answer === choice) {
-      setCorrectAnswer(true);
-      return true;
-    } else {
-      setWrongAnswer(true);
-      return false;
-    }
-  }
-
-  useEffect(() => {
-    fetchQuestionInformation();
-  }, []);
-
-  const currentQuestion = questions[count];
-
-  useEffect(() => {
-    setTimeLeft(10);
-    setTimeElapsed(0);
-
-    timerRef.current = setInterval(() => {
-      if (!currentQuestion) return;
-
-      setTimeLeft((prev) => {
-        if (prev <= 1) {
-          clearInterval(timerRef.current!);
-          setIsAnswered(true);
+    
+      function updateCount() {
+        setCount((count) => count + 1);
+      }
+    
+      function returnToHome() {
+        navigate("/dashboard");
+      }
+    
+      // Checks user's selected answer
+      function compareAnswer(choice: string) {
+        if (currentQuestion?.answer === choice) {
+          setCorrectAnswer(true);
+          return true;
+        } else {
           setWrongAnswer(true);
-          return 0;
+          return false;
         }
-        return prev - 1;
-      });
-
-      setTimeElapsed((prev) => prev + 1);
-    }, 1000);
-
-    return () => clearInterval(timerRef.current!);
-  }, [currentQuestion]);
-
-  function stopTimer() {
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-      timerRef.current = null;
-    }
-  }
-
-  // Keyboard shortcuts:
-  // 'n' → Next question
-  // 'r' → Return home
-  useEffect(() => {
-    const handleKeyDown = async (e: KeyboardEvent) => {
-      if (e.key === 'n' && isAnswered && count < 9) {
-        updateCount();
-        setCorrectAnswer(false);
-        setWrongAnswer(false);
-        setIsAnswered(false);
       }
-
-      if (e.key === 'r' && isAnswered && count >= 9) {
-        if (user?.id) {
-          await fetchScore();
-          await addDailyScore(user.id, currentScore);
+    
+      // On mount: fetch questions
+      useEffect(() => {
+        fetchQuestionInformation();
+      }, []);
+    
+      const currentQuestion = questions[count];
+    
+      // Timer logic: resets on each question
+      useEffect(() => {
+        setTimeLeft(10);
+        setTimeElapsed(0);
+    
+        timerRef.current = setInterval(() => {
+          if (!currentQuestion) return;
+    
+          setTimeLeft((prev) => {
+            if (prev <= 1) {
+              clearInterval(timerRef.current!);
+              setIsAnswered(true);
+              setWrongAnswer(true);
+              return 0;
+            }
+            return prev - 1;
+          });
+    
+          setTimeElapsed((prev) => prev + 1);
+        }, 1000);
+    
+        return () => clearInterval(timerRef.current!);
+      }, [currentQuestion]);
+    
+      function stopTimer() {
+        if (timerRef.current) {
+          clearInterval(timerRef.current);
+          timerRef.current = null;
         }
-        returnToHome();
       }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isAnswered, count, user, currentScore]);
-
-  return (
-    <div className="trivia-container">
-      <div className="counter-display">{count + 1}/10</div>
-      <div className="score-box">Score: {currentScore}</div>
-      <div>Time Left: {timeLeft}</div>
-
-      {!currentQuestion ? (
-        <div>Please Wait Game is Loading... </div>
-      ) : (
-        <>
-          <div className="question-box">{currentQuestion.question}</div>
-
-          <div className="choices-grid">
-            {currentQuestion.options.map((choice, index) => (
-              <button
-                onClick={async () => {
-                  stopTimer();
-                  compareAnswer(choice);
-                  setIsAnswered(true);
-                  if (compareAnswer(choice)) await fetchScore();
-                }}
-                key={index}
-                disabled={isAnswered}
-                className="choice-box"
-              >
-                {choice}
-              </button>
-            ))}
-          </div>
-
-          <div className="answer-buttons-container">
-            {correctAnswer && <button className="correct-button">Correct Answer</button>}
-            {wrongAnswer && (
-              <div>
-                <button className="wrong-button">Wrong Answer</button>
-                <p>The correct answer is {currentQuestion.answer}</p>
-              </div>
-            )}
-          </div>
-
-          {count < 9 && isAnswered ? (
-            <div className="next-button-container">
-              <button
-                onClick={() => {
-                  updateCount();
-                  setCorrectAnswer(false);
-                  setWrongAnswer(false);
-                  setIsAnswered(false);
-                }}
-                className="next-button"
-              >
-                Next Question
-              </button>
-            </div>
+    
+      // Keyboard shortcuts:
+      // 'n' → Next question (after answering)
+      // 'r' → Return home (after game ends)
+      useEffect(() => {
+        const handleKeyDown = async (e: KeyboardEvent) => {
+          if (e.key === 'n' && isAnswered && count < 9) {
+            updateCount();
+            setCorrectAnswer(false);
+            setWrongAnswer(false);
+            setIsAnswered(false);
+          }
+    
+          if (e.key === 'r' && isAnswered && count >= 9) {
+            if (user?.id) {
+              await fetchScore();
+              await addDailyScore(user.id, currentScore);
+            }
+            returnToHome();
+          }
+        };
+    
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+      }, [isAnswered, count, user, currentScore]);
+    
+      return (
+        <div className="trivia-container">
+          <div className="counter-display">{count + 1}/10</div>
+          <div className="score-box">Score: {currentScore}</div>
+          <div>Time Left: {timeLeft}</div>
+    
+          {!currentQuestion ? (
+            <div>Please Wait Game is Loading... </div>
           ) : (
-            <div className="next-button-container">
-              <button
-                onClick={async () => {
-                  if (user?.id) {
-                    await fetchScore();
-                    await addDailyScore(user.id, currentScore);
-                  }
-                  returnToHome();
-                }}
-                className="next-button"
-              >
-                Return Home
-              </button>
-            </div>
+            <>
+              <div className="question-box">{currentQuestion.question}</div>
+    
+              <div className="choices-grid">
+                {currentQuestion.options.map((choice, index) => (
+                  <button
+                    onClick={async () => {
+                      stopTimer();
+                      compareAnswer(choice);
+                      setIsAnswered(true);
+                      if (compareAnswer(choice)) await fetchScore();
+                    }}
+                    key={index}
+                    disabled={isAnswered}
+                    className="choice-box"
+                  >
+                    {choice}
+                  </button>
+                ))}
+              </div>
+    
+              <div className="answer-buttons-container">
+                {correctAnswer && <button className="correct-button">Correct Answer</button>}
+                {wrongAnswer && (
+                  <div>
+                    <button className="wrong-button">Wrong Answer</button>
+                    <p>The correct answer is {currentQuestion.answer}</p>
+                  </div>
+                )}
+              </div>
+    
+              {count < 9 && isAnswered ? (
+                <div className="next-button-container">
+                  <button
+                    onClick={() => {
+                      updateCount();
+                      setCorrectAnswer(false);
+                      setWrongAnswer(false);
+                      setIsAnswered(false);
+                    }}
+                    className="next-button"
+                  >
+                    Next Question
+                  </button>
+                </div>
+              ) : (
+                <div className="next-button-container">
+                  <button
+                    onClick={async () => {
+                      if (user?.id) {
+                        await fetchScore();
+                        await addDailyScore(user.id, currentScore);
+                      }
+                      returnToHome();
+                    }}
+                    className="next-button"
+                  >
+                    Return Home
+                  </button>
+                </div>
+              )}
+            </>
           )}
-        </>
-      )}
-    </div>
-  );
-}
-
-export default Trivia;
+        </div>
+      );
+    }
+    
+    export default Trivia;
+    

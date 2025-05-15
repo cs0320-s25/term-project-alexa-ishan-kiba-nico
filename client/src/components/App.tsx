@@ -11,7 +11,7 @@ import Trivia from './DailyTrivia';
 import { EndlessTrivia } from './EndlessTrivia';
 
 function MainApp() {
-  const { user, isSignedIn } = useUser();
+  const { user } = useUser();
   const navigate = useNavigate();
   const location = useLocation();
   const currentPath = location.pathname;
@@ -28,36 +28,6 @@ function MainApp() {
       navigate('/dashboard');
     }
   }, [user]);
-
-  // Keyboard shortcuts: D = Dashboard, L = Leaderboard, T = Trivia, E = Endless, Q = Logout
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (!isSignedIn) return;
-
-      switch (event.key.toLowerCase()) {
-        case 'd':
-          navigate('/dashboard');
-          break;
-        case 'l':
-          navigate('/leaderboard');
-          break;
-        case 't':
-          navigate('/trivia');
-          break;
-        case 'e':
-          navigate('/endless');
-          break;
-        case 'q':
-          document.getElementById('logout-btn')?.click();
-          break;
-        default:
-          break;
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [navigate, isSignedIn]);
 
   const showHeader =
     currentPath.startsWith("/dashboard") || currentPath.startsWith("/leaderboard");

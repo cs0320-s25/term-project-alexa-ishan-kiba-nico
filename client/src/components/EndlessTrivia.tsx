@@ -1,3 +1,12 @@
+/**
+ * EndlessTrivia.tsx
+ *
+ * This component runs the endless mode trivia game.
+ * - Users enter a topic and get unlimited questions until they answer incorrectly.
+ * - Tracks the player's current streak and allows them to submit it when done.
+ * - Displays correct/wrong feedback and supports continuous play.
+ */
+
 import { useState } from "react";
 import { useUser } from "@clerk/clerk-react";
 import { Question } from "./DailyTrivia";
@@ -5,9 +14,9 @@ import { addTopicScore } from "../utils/api";
 import { useNavigate } from "react-router-dom";
 
 export function EndlessTrivia() {
-  const [topic, setTopic] = useState<string>("");
-  const [streak, setStreak] = useState<number>(0);
-  const [question, setQuestion] = useState<Question | null>(null);
+  const [topic, setTopic] = useState<string>(""); // User-specified trivia topic
+  const [streak, setStreak] = useState<number>(0); // Consecutive correct answers
+  const [question, setQuestion] = useState<Question | null>(null); // Current question
   const [correctAnswer, setCorrectAnswer] = useState<boolean>(false);
   const [wrongAnswer, setWrongAnswer] = useState<boolean>(false);
   const [isAnswered, setIsAnswered] = useState<boolean>(false);
@@ -15,6 +24,7 @@ export function EndlessTrivia() {
   const { user } = useUser();
   const navigate = useNavigate();
 
+  // Fetches a new question from the backend using the selected topic
   async function fetchQuestion() {
     try {
       const response = await fetch(`http://localhost:3232/endless?topic=${topic}`);
@@ -32,6 +42,7 @@ export function EndlessTrivia() {
     }
   }
 
+  // Checks whether the selected answer is correct
   function compareAnswer(choice: string): boolean {
     const isCorrect = question?.answer === choice;
     setCorrectAnswer(isCorrect);
@@ -39,6 +50,7 @@ export function EndlessTrivia() {
     return isCorrect;
   }
 
+  // Ends the game and saves the player's score to the backend
   async function endGame() {
     try {
       if (user?.username) {
@@ -51,6 +63,7 @@ export function EndlessTrivia() {
 
   return (
     <div>
+      {/* Button to end game and return to dashboard */}
       <button
         onClick={async () => {
           await endGame();
@@ -60,6 +73,7 @@ export function EndlessTrivia() {
         End Game
       </button>
 
+      {/* Start screen: input for topic and play button */}
       {!question ? (
         <div>
           <input
@@ -74,6 +88,7 @@ export function EndlessTrivia() {
           <p>Streak: {streak}</p>
           <p>Current Question: {question.question}</p>
 
+          {/* Render answer choices */}
           {question.options.map((choice, index) => (
             <div key={index}>
               <button
@@ -94,25 +109,28 @@ export function EndlessTrivia() {
             </div>
           ))}
 
-          {wrongAnswer && <div>
-            <p>Correct Answer: {question.answer}</p>
-            <p>Game Over</p>
-            
-            </div>}
+          {/* Display wrong answer and end message */}
+          {wrongAnswer && (
+            <div>
+              <p>Correct Answer: {question.answer}</p>
+              <p>Game Over</p>
+            </div>
+          )}
 
+          {/* If correct, allow next question */}
           {correctAnswer && (
             <div>
-                <p>Correct!</p>
-            <button
-              onClick={async () => {
-                await fetchQuestion();
-                setCorrectAnswer(false);
-                setWrongAnswer(false);
-                setIsAnswered(false);
-              }}
-            >
-              Next Question
-            </button>
+              <p>Correct!</p>
+              <button
+                onClick={async () => {
+                  await fetchQuestion();
+                  setCorrectAnswer(false);
+                  setWrongAnswer(false);
+                  setIsAnswered(false);
+                }}
+              >
+                Next Question
+              </button>
             </div>
           )}
         </div>

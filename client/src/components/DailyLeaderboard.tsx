@@ -3,11 +3,7 @@
  *
  * This component displays the daily leaderboard with player rankings, usernames, and Elo scores.
  * It fetches leaderboard data from the backend using the current user's username.
- * 
- * Dependencies:
- * - useUser() from Clerk for accessing the current authenticated user
- * - getDailyLeaderboard() from utils/api for retrieving leaderboard data
- * - CSS styling from Leaderboard.css
+
  */
 
 import { useEffect, useState } from 'react';
