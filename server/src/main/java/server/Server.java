@@ -41,7 +41,7 @@ public class Server {
       Spark.get("/user", new UserHandler(firebaseUtils));
       Spark.get("/points", new PointsHandler(firebaseUtils));
       Spark.get("/question", new TriviaQuestionHandler(firebaseUtils));
-      Spark.get("/daily", new DailyTriviaHandler());
+      Spark.get("/daily", new DailyTriviaHandler(firebaseUtils));
       Spark.get("/played", new PlayedHandler(firebaseUtils));
       Spark.get("/topic", new TopicHandler(firebaseUtils));
       Spark.get("/score", new ScoreHandler(firebaseUtils));
