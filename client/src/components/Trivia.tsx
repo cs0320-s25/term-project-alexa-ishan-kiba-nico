@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { useUser } from '@clerk/clerk-react';
 import { addDailyScore } from '../utils/api';
 
+// Create the form for a question
+
 export type Question = {
     question: string;
     answer: string;
@@ -26,7 +28,7 @@ export function Trivia() {
 
 
 
-    
+    // calculate the score from the backend base on the current score and time taken
 
     async function fetchScore() {
         try {
@@ -43,6 +45,8 @@ export function Trivia() {
             console.log(error);
         }
     }
+
+    // call backend to generate a random topic or get current daily topic 
 
     async function fetchDailyTopic() {
         try {
@@ -66,6 +70,9 @@ export function Trivia() {
     
       
 
+
+    // generate 10 questions for trivia mode or grab 10 cached questions
+
     async function fetchQuestionInformation() {
         try {
             const questionTopic = await fetchDailyTopic();
@@ -82,13 +89,19 @@ export function Trivia() {
         }
     }
 
+    // increment the question number the user is on
+
     function updateCount() {
         setCount((count) => count + 1);
     }
 
+    // allow the user to navigate back to the home page
+
     function returnToHome() {
         navigate("/dashboard");
     }
+
+    // determine if the user selects the correct answer
 
     function compareAnswer(choice: string) {
         if (currentQuestion?.answer == choice) {
@@ -101,14 +114,21 @@ export function Trivia() {
     }
 
 
+    // fetch 10 questions
 
     useEffect(() => {
         console.log("topic: " + topic);
         fetchQuestionInformation();
     }, []);
 
+    // current question index
+
     const currentQuestion = questions[count];
 
+
+
+    
+    // build 10 second timer for question
     useEffect(() => {
         setTimeLeft(10); 
         setTimeElapsed(0);
@@ -136,6 +156,8 @@ export function Trivia() {
     
         return () => clearInterval(timerRef.current!); 
     }, [currentQuestion]);
+
+    // stop the timer when a user runs out of time or selects an answer
 
     function stopTimer() {
         if (timerRef.current) {
