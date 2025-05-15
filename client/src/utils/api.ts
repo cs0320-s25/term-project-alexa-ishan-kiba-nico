@@ -64,6 +64,11 @@ export async function addTopicScore(category: string, username: string, streak: 
   })
 }
 
+export async function getDailyWord() {
+  const response = await queryAPI("random", {});
+  return response.word;
+}
+
 
 
 
