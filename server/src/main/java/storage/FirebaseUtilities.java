@@ -184,6 +184,17 @@ public class FirebaseUtilities implements StorageInterface {
   }
 
   @Override
+  public void addDailyQuestions(Map<String, Object> data) throws IllegalArgumentException {
+    if (data == null) {
+      throw new IllegalArgumentException("addDocument: data cannot be null");
+    }
+
+    Firestore db = FirestoreClient.getFirestore();
+    DocumentReference dataRef = db.collection("daily").document("question");
+    dataRef.set(data);
+  }
+
+  @Override
   public List<String> getAllUserIds() throws InterruptedException, ExecutionException {
     Firestore db = FirestoreClient.getFirestore();
 
