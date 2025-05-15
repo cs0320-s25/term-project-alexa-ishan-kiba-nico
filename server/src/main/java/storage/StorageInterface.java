@@ -12,6 +12,10 @@ public interface StorageInterface {
 
   void addCategoryData(String category, Map<String, Object> data);
 
+  void addDailyWord(Map<String, Object> data);
+
+  void addDailyQuestions(Map<String, Object> data);
+
   List<Map<String, Object>> getCollection(String uid, String collection_id)
       throws InterruptedException, ExecutionException;
 
@@ -27,6 +31,10 @@ public interface StorageInterface {
 
   Map<String, Object> getCategoryData(String category)
       throws InterruptedException, ExecutionException;
+
+  Map<String, Object> getDailyWord() throws InterruptedException, ExecutionException;
+
+  Map<String, Object> getDailyQuestions() throws InterruptedException, ExecutionException;
 
   void clearUser(String uid) throws InterruptedException, ExecutionException;
 }

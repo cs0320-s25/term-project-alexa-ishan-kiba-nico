@@ -13,16 +13,32 @@
  */
 
 import { useNavigate } from "react-router-dom";
-import { checkPlayerStatus, updatePlayerStatus } from "../utils/api";
+import { checkPlayerStatus, getDailyWord, updatePlayerStatus } from "../utils/api";
 import { useUser } from "@clerk/clerk-react";
-
+import { useState, useEffect } from "react";
 export function Dashboard() {
-    const { user } = useUser(); // Gets the current user info from Clerk
-    const userId = user?.id;    // Extracts the user ID
-    const navigate = useNavigate(); // Allows page navigation
+    const {user} = useUser();
+    const userId = user?.id
+    const [word, setWord] = useState<string>("");
+    const navigate = useNavigate();
 
-    // Called when the user clicks the "Daily Game" button
-    const handleClick = async () => {
+
+    
+    useEffect(() => {
+        async function fetchWord() {
+          const dailyWord = await getDailyWord();
+          setWord(dailyWord);
+        }
+      
+        fetchWord();
+      }, []); 
+      
+
+
+
+    
+
+    const playDailyTriva = async () => {
         if (userId) {
             const hasPlayed = await checkPlayerStatus(userId); // Ask server if user already played
             console.log(hasPlayed);
@@ -34,12 +50,22 @@ export function Dashboard() {
                 updatePlayerStatus(userId, "true");
                 navigate("/trivia");
             }
-        }
-    };
+            }
+    }
+
+    const playEndlessTrivia = async () => {
+        navigate("/endless");
+    }
+
+    
+
 
     return (
         <div>
-            <button onClick={handleClick}>Daily Game</button>
+            <button onClick={playDailyTriva}>Daily Game</button>
+            <button onClick={playEndlessTrivia}>Endless mode</button>
+            <p>Today's Daily Word: {word}</p>
+            
         </div>
     );
 }
