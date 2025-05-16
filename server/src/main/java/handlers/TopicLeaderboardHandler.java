@@ -14,6 +14,10 @@ import spark.Route;
 import storage.Category;
 import storage.StorageInterface;
 
+/**
+ * Handles "/topicleaderboard" endpoint; returns the top streak holder for each trivia category from
+ * stored leaderboard data.
+ */
 public class TopicLeaderboardHandler implements Route {
 
   private final StorageInterface storageHandler;

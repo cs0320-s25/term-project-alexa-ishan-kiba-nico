@@ -19,7 +19,9 @@ interface LeaderboardEntry {
   username: string;
   streak: number;
 }
-
+/**
+ * Displays a ranked list of users based on their longest streaks in endless trivia by topic
+ */
 export function TopicLeaderboard() {
   // State to hold fetched leaderboard data
   const [topicLeaderboardData, setTopicLeaderboardData] = useState<LeaderboardEntry[]>([]);

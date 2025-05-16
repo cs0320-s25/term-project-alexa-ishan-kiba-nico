@@ -13,6 +13,9 @@
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 
+/**
+ * Provides navigation to view both the daily and topic-based leaderboards
+ */
 export function Leaderboard() {
   const navigate = useNavigate();
 

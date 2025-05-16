@@ -1,5 +1,9 @@
 package storage;
 
+/**
+ * Stores info about a user on the leaderboard, including rank, username, and Elo rating. These can
+ * be accessed with getter methods.
+ */
 public class RankedUser {
   private int rank;
   private String username;
@@ -12,14 +16,16 @@ public class RankedUser {
   }
 
   public int getRank() {
-    return rank;
+    int newRank = rank;
+    return newRank; // defensive copy
   }
 
   public String getUsername() {
-    return username;
+    return new String(username); // defensive copy
   }
 
   public int getElo() {
-    return elo;
+    int newElo = elo;
+    return newElo; // defensive copy
   }
 }

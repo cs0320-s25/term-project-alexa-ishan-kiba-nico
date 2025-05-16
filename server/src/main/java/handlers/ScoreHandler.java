@@ -11,6 +11,10 @@ import spark.Response;
 import spark.Route;
 import storage.StorageInterface;
 
+/**
+ * Handles "/score" endpoint; updates a user's score (Elo) in storage based on provided uid and
+ * score query parameters
+ */
 public class ScoreHandler implements Route {
 
   private StorageInterface storageHandler;

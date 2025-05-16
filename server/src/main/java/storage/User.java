@@ -1,5 +1,9 @@
 package storage;
 
+/**
+ * Holds data for game Users including username, elo rating, date, and whether or not they have
+ * played the day's game. These values can be set or retrieved.
+ */
 public class User {
   private String username;
   private int elo;
@@ -16,7 +20,7 @@ public class User {
   }
 
   public String getUsername() {
-    return username;
+    return new String(username); // defensive copy
   }
 
   public void setUsername(String username) {
@@ -24,7 +28,8 @@ public class User {
   }
 
   public int getElo() {
-    return elo;
+    int newElo = elo;
+    return newElo; // defensive copy
   }
 
   public void setElo(int elo) {
@@ -32,7 +37,7 @@ public class User {
   }
 
   public String getDate() {
-    return date;
+    return new String(date); // defensive copy
   }
 
   public void setDate(String date) {
