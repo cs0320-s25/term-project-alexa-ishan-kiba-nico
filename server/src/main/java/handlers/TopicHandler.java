@@ -80,8 +80,10 @@ public class TopicHandler implements Route {
           if (currentStreak == Integer.parseInt(streak)) {
             String currentUser =
                 this.storageHandler.getCategoryData(categoryName).get("username").toString();
-            categoryData.put("username", currentUser + ", " + username);
-            this.storageHandler.addCategoryData(categoryName, categoryData);
+            if (!currentUser.equals(username)) {
+              categoryData.put("username", currentUser + ", " + username);
+              this.storageHandler.addCategoryData(categoryName, categoryData);
+            }
           }
         }
 
