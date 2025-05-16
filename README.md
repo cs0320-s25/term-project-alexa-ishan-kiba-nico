@@ -39,7 +39,7 @@ ChatGPT was used with the prompt "explain how an Elo system works, and suggest a
 
 - `Dashboard.tsx:` Serves as the user's main landing page with options to start the daily or endless trivia games
 - `DailyTrivia.tsx:` Implements the timed 10-question daily trivia game using a dynamic topic and scoring system
-- `EndlessTrivia.tsx:` Allows users to continuously answer questions on a chosen topic to build a streak until they get one wrong
+- `EndlessTrivia.tsx:` Contains structure for endless triva gamemode. Allows users to continuously answer questions on a chosen topic to build a streak until they get one wrong
 - `Leaderboard.tsx:` Provides navigation to view both the daily and topic-based leaderboards
 - `DailyLeaderboard.tsx:` Displays a ranked list of users based on their daily trivia performance
 - ` TopicLeaderboard.tsx:` Displays a ranked list of users based on their longest streaks in endless trivia by topic

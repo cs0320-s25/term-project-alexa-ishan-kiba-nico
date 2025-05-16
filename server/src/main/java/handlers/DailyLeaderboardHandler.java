@@ -16,8 +16,8 @@ import storage.RankedUser;
 import storage.StorageInterface;
 
 /**
- * This handler Handles "/dailyleaderboard" endpoint; handles HTTP requests to generate and return
- * the daily leaderboard for a given username
+ * Handles the "/dailyleaderboard" endpoint; handles HTTP requests to generate and return the daily
+ * leaderboard for a given username.
  */
 public class DailyLeaderboardHandler implements Route {
 
