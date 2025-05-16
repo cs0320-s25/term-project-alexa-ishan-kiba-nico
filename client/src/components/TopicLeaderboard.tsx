@@ -1,8 +1,19 @@
+/**
+ * TopicLeaderboard.tsx
+ *
+ * This component displays a leaderboard showing top users by category and their current correct-answer streaks.
+ * It fetches leaderboard data from the backend using getTopicLeaderboard().
+ *
+ * Dependencies:
+ * - getTopicLeaderboard() from utils/api for retrieving topic leaderboard data
+ * - CSS styling from Leaderboard.css
+ */
 
 import { useEffect, useState } from 'react';
 import '../styles/Leaderboard.css';
 import { getTopicLeaderboard } from "../utils/api";
 
+// Structure for each leaderboard row
 interface LeaderboardEntry {
   category: string;
   username: string;
@@ -12,16 +23,19 @@ interface LeaderboardEntry {
  * Displays a ranked list of users based on their longest streaks in endless trivia by topic
  */
 export function TopicLeaderboard() {
+  // State to hold fetched leaderboard data
   const [topicLeaderboardData, setTopicLeaderboardData] = useState<LeaderboardEntry[]>([]);
 
+  // Fetch topic leaderboard data once on component mount
   useEffect(() => {
     getTopicLeaderboard().then((json) => {
         if (json.result === "success") {
             setTopicLeaderboardData(json.leaderboard)
         }
-    })
-  }, [])
+    });
+  }, []);
 
+  // Render leaderboard as a table
   return (
     <div className="leaderboard-container">
       <h2 aria-label="leaderboard-header">Leaderboard</h2> 

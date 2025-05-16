@@ -1,8 +1,17 @@
+/**
+ * DailyLeaderboard.tsx
+ *
+ * This component displays the daily leaderboard with player rankings, usernames, and Elo scores.
+ * It fetches leaderboard data from the backend using the current user's username.
+
+ */
+
 import { useEffect, useState } from 'react';
 import '../styles/Leaderboard.css';
 import { getDailyLeaderboard } from "../utils/api";
 import { useUser } from '@clerk/clerk-react';
 
+// Structure for a leaderboard entry
 interface LeaderboardEntry {
   rank: number;
   username: string;
@@ -12,19 +21,24 @@ interface LeaderboardEntry {
  * Displays a ranked list of users based on their daily trivia performance
  */
 export function DailyLeaderboard() {
+  // State to store leaderboard data
   const [dailyLeaderboardData, setDailyLeaderboardData] = useState<LeaderboardEntry[]>([]);
+  
+  // Get the currently logged-in user
   const { user } = useUser();
 
+  // Fetch leaderboard data when user info is available
   useEffect(() => {
     if (user?.username) {
         getDailyLeaderboard(user.username).then((json) => {
             if (json.result === "success") {
               setDailyLeaderboardData(json.leaderboard)
             }
-        })
+        });
     }
-  }, [user])
+  }, [user]);
 
+  // Render the leaderboard table
   return (
     <div className="leaderboard-container">
       <h2 aria-label="leaderboard-header">Leaderboard</h2> 
