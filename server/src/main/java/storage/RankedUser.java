@@ -16,14 +16,16 @@ public class RankedUser {
   }
 
   public int getRank() {
-    return rank;
+    int newRank = rank;
+    return newRank; // defensive copy
   }
 
   public String getUsername() {
-    return username;
+    return new String(username); // defensive copy
   }
 
   public int getElo() {
-    return elo;
+    int newElo = elo;
+    return newElo; // defensive copy
   }
 }
