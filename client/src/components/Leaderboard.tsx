@@ -3,6 +3,11 @@
  *
  * This component displays links to both the Daily and Topic leaderboards.
  * It uses nested routes to render the selected leaderboard view below the buttons.
+ *
+ * Keyboard Shortcuts:
+ * - 'a' → Daily Leaderboard
+ * - 's' → Topic Leaderboard
+ * - 'd' → Back to Dashboard
  */
 
 import { Link, Outlet, useNavigate } from 'react-router-dom';
@@ -11,11 +16,16 @@ import { useEffect } from 'react';
 export function Leaderboard() {
   const navigate = useNavigate();
 
-  // Keyboard shortcut: 'd' returns to dashboard
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'd') {
         navigate('/dashboard');
+      }
+      if (e.key === 'a') {
+        navigate('/leaderboard/daily');
+      }
+      if (e.key === 's') {
+        navigate('/leaderboard/topic');
       }
     };
 
