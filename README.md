@@ -5,18 +5,33 @@
 ### Description
 Quiz Whiz is a trivia game which uses a Large Language Model (LLM) to generate trivia questions. The game includes two modes: a "daily game" mode, and an "endless" mode. In the "daily game" mode, the LLM picks a word, and this word is used by the LLM to generate ten questions on this unique topic. The mode can only be played once per day. In "endless" mode, you pick a topic and the LLM generates questions until you get one wrong. In both game modes, scoring is based on both timing and accuracy; the faster you answer a question, the more points you get. 
 
+This project uses OpenAI's Chat Completions API for question generation, Clerk for authentication purposes, and Firebase to store information. Please see "External Resources" section for additional integrated components. 
+
+### GitHub Repository
+- **URL:** https://github.com/cs0320-s25/term-project-alexa-ishan-kiba-nico
+
 ### Team Members
--cs login: **anshield**
--cs login: **ikhuran1**
--cs login: **nmromero**
--cs login: **scbhutia**
+- cs login: **anshield**
+- cs login: **ikhuran1**
+- cs login: **nmromero**
+- cs login: **scbhutia**
 
 ### Collaborators
 
-### GitHub Repository
--**URL:** https://github.com/cs0320-s25/term-project-alexa-ishan-kiba-nico
+OpenAI. (2025). ChatGPT (Dec 24 version) [Large language model].https://chat.openai.com/chat
+
+ChatGPT was used with the prompt "explain how an Elo system works, and suggest a method by which it can be integrated into a trivia game" to plan for an implementation of an Elo rating system for use in Quiz Whiz. 
+
+
 
 ## Design Choices
+
+### External Resources
+- OpenAI's Chat Completions API
+- Firebase
+- Clerk
+- Moshi
+- React
 
 ### Key Classes
 
@@ -27,7 +42,7 @@ Quiz Whiz is a trivia game which uses a Large Language Model (LLM) to generate t
 - `EndlessTrivia.tsx:` Allows users to continuously answer questions on a chosen topic to build a streak until they get one wrong
 - `Leaderboard.tsx:` Provides navigation to view both the daily and topic-based leaderboards
 - `DailyLeaderboard.tsx:` Displays a ranked list of users based on their daily trivia performance
--` TopicLeaderboard.tsx:` Displays a ranked list of users based on their longest streaks in endless trivia by topic
+- ` TopicLeaderboard.tsx:` Displays a ranked list of users based on their longest streaks in endless trivia by topic
 
 #### Back End
 
@@ -50,8 +65,7 @@ Quiz Whiz is a trivia game which uses a Large Language Model (LLM) to generate t
 - `StorageInterface.java:`  Interacts with Firebase to provide methods to add, retrieve, and manage user data, category data, and daily trivia content
 
 
-### Relationships Between Classes/Interfaces
-style:
+### Relationships Between Classes and Front/Back End
 
 - The `ScoreHandler` uses `StorageInterface` to update a user's ELO score based on query parameters.
 - The `TopicHandler` interacts with `StorageInterface` to update or initialize streak leader data for a specific category.
@@ -62,10 +76,10 @@ style:
 - The `User` class encapsulates user-specific data such as name, ELO score, date, and whether they’ve played today.
 - The `StorageInterface` serves as a shared abstraction that all handlers and the `Ranker` class rely on for data persistence and retrieval.
 - The front end sends HTTP requests with query parameters (e.g. uid, username, score) to specific backend routes handled by classes like `UserHandler`, `ScoreHandler`, and `TopicHandler`.
-- The backend handlers parse these parameters using Spark’s Request API and respond with JSON-encoded results using Moshi.
-- The frontend receives these JSON responses and uses them to dynamically update UI elements such as leaderboards, user profiles, or streak tables.
-- When a user submits their quiz score or completes a streak, the frontend calls the appropriate endpoint (/score, /topic, etc.), which persists the update through StorageInterface.
-- The frontend retrieves leaderboard data by making GET requests to endpoints like /rankings or /topic-leaderboard, which are served by Ranker or TopicLeaderboardHandler.
+- The back end handlers parse these parameters using Spark’s Request API and respond with JSON-encoded results using Moshi.
+- The front end receives these JSON responses and uses them to dynamically update UI elements such as leaderboards, user profiles, or streak tables.
+- When a user submits their quiz score or completes a streak, the front end calls the appropriate endpoint (/score, /topic, etc.), which persists the update through StorageInterface.
+- The front end retrieves leaderboard data by making GET requests to endpoints like /rankings or /topic-leaderboard, which are served by Ranker or TopicLeaderboardHandler.
 
 ## Errors and Bugs
 
@@ -73,15 +87,9 @@ N/A
 
 ## Tests
 
-Testing includes end to end tests with playwright that: 
-- Assert that the dropdown and submit buttons appear only after logging in.
-- Assert that after submission, the table displays the expected header and data from the mocked data.
-- Assert that switching between datasets multiple times updates the displayed tables correctly.
-- Assert that multiple tables are rendered and are scrollable. 
-- Assert that logging out removes all loaded tables and that logging back in resets 
-- Assert that error handling works by verifying that invalid datasets trigger appropriate error messages in bar chart view.
-- Assert that a valid dataset renders a bar chart with a visible canvas element.
-- Assert that switching between view types (tabular and bar chart) functions properly
+Testing is done both with mocked data and with actual API calls. This includes integration testing, end-to-end testing, and unit testing. For more information regarding tests, please see `MockData.java`, `MockedScorage.java`, and `RankerTest.java`.
 
+## Running the Program
 
-**To run the program, simply type "npm start" into the terminal. To run test cases type "npm run test:e2e".**
+**To run the program: run the back end by starting the `Server.java` file. Start the front end with the "npm start" command in the terminal, from the "client" folder. To run test cases, type "npm run test:e2e".**
+
