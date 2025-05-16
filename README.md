@@ -87,9 +87,9 @@ N/A
 
 ## Tests
 
-Testing is done both with mocked data and with actual API calls. This includes integration testing, end-to-end testing, and unit testing. For more information regarding tests, please see `MockData.java`, `MockedScorage.java`, and `RankerTest.java`.
+Testing is done both with mocked data and with actual API calls. This includes integration testing, end-to-end testing, and unit testing. For more information regarding tests, please see `App.spec.ts`, `MockData.java`, `MockedScorage.java`, and `RankerTest.java`.
 
 ## Running the Program
 
-**To run the program: run the back end by starting the `Server.java` file. Start the front end with the "npm start" command in the terminal, from the "client" folder. To run test cases, type "npm run test:e2e".**
+**To run the program: run the back end by starting the `Server.java` file. Start the front end with the "npm start" command in the terminal, from the "client" folder. To run test cases, type "npm run test".**
 
