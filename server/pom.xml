@@ -46,16 +46,16 @@
     <dependency>
       <groupId>com.squareup.okhttp3</groupId>
       <artifactId>okhttp</artifactId>
-      <version>3.14.9</version> <!-- or another specific version -->
+      <version>3.14.9</version>
+      <!-- or another specific version -->
     </dependency>
 
     <dependency>
       <groupId>com.squareup.okhttp3</groupId>
       <artifactId>okhttp</artifactId>
-      <version>4.12.0</version> <!-- or latest from Maven Central -->
+      <version>4.12.0</version>
+      <!-- or latest from Maven Central -->
     </dependency>
-
-
 
     <!--
            Spark is a lightweight framework for creating web applications.
@@ -100,7 +100,6 @@
       <version>9.2.0</version>
     </dependency>
 
-
     <dependency>
       <groupId>com.squareup.okhttp3</groupId>
       <artifactId>okhttp</artifactId>
@@ -112,8 +111,6 @@
       <artifactId>logging-interceptor</artifactId>
       <version>4.12.0</version>
     </dependency>
-
-
 
     <!--
            JUnit is a unit testing library for Java.
