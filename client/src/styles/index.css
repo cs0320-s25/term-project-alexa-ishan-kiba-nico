@@ -1,4 +1,4 @@
-/* Universal styles for the entire mock */
+/* Universal styles for the entire app */
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -6,7 +6,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: #f5f5f5;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -30,28 +30,29 @@ h1 {
 }
 
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 1em 2em;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  padding: 0.75em 1.5em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: #ffffff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
   cursor: pointer;
-  transition: border-color 0.25s;
-  margin: 0.5rem;
-
-  /* TODO 3: Make a CSS change! */
+  transition: all 0.2s ease-in-out;
+  margin: 0.75rem;
 }
 button:hover {
-  border-color: #646cff;
+  background-color: #f0f0f0;
+  border-color: #888;
+  transform: translateY(-1px);
 }
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: 3px auto -webkit-focus-ring-color;
 }
 
-/* media queries for screen sizing adaption */
+/* Light mode adjustments */
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
