@@ -1,0 +1,130 @@
+.trivia-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    min-height: 100vh;
+    box-sizing: border-box;
+    background-color: white;
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  /* Screen color states */
+  .white-screen {
+    background-color: white;
+  }
+  .green-screen {
+    background-color: #c8f7c5;
+  }
+  .red-screen {
+    background-color: #f7c5c5;
+  }
+  
+  .counter-display {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .question-box {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 2rem;
+    width: 100%;
+    max-width: 800px;
+  }
+  
+  .choices-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 2rem;
+  }
+  
+  .choice-box {
+    padding: 1rem;
+    font-size: 1rem;
+    border: 2px solid #444;
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: #f0f0f0;
+    transition: background-color 0.3s;
+  }
+  
+  .choice-box:hover {
+    background-color: #ddd;
+  }
+  
+  .next-button-container {
+    margin-top: auto;
+    padding-top: 1rem;
+  }
+  
+  .next-button {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  .next-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .answer-buttons-container {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    justify-content: center;
+  }
+  
+  .correct-button {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  .correct-button:hover {
+    background-color: #218838;
+  }
+  
+  .wrong-button {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  .wrong-button:hover {
+    background-color: #c82333;
+  }
+  
+  .score-box {
+    font-size: 1.2rem;
+    margin: 10px 0;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  /* 🆕 Space out Endless input + Play buttons */
+  .trivia-container > input,
+  .trivia-container > button {
+    margin: 0.75rem 0;
+  }
+  

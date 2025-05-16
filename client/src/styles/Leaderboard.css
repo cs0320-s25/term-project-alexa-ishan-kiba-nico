@@ -1,0 +1,75 @@
+.leaderboard-container {
+  width: 85%;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.leaderboard-container h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1.2rem;
+  color: #333;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 0.5rem;
+}
+
+.leaderboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  background-color: white;
+}
+
+.leaderboard-table th,
+.leaderboard-table td {
+  padding: 1rem;
+  text-align: center;
+  font-size: 1rem;
+  color: #444;
+}
+
+.leaderboard-table th {
+  background-color: #1a1a1a;
+  color: #fff;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.leaderboard-table tr:nth-child(even) {
+  background-color: #f0f0f0;
+}
+
+.leaderboard-table tr:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+.leaderboard-table tr:hover {
+  background-color: #e0e0e0;
+}
+
+.leaderboard-table td {
+  border-bottom: 1px solid #ccc;
+}
+
+.leaderboard-table th:nth-child(1),
+.leaderboard-table td:nth-child(1) {
+  width: 10%;
+}
+
+.leaderboard-table th:nth-child(2),
+.leaderboard-table td:nth-child(2) {
+  width: 50%;
+  font-weight: 500;
+}
+
+.leaderboard-table th:nth-child(3),
+.leaderboard-table td:nth-child(3) {
+  width: 20%;
+  font-weight: bold;
+  color: #007BFF;
+}
