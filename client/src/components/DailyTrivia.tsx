@@ -4,109 +4,167 @@ import { useNavigate } from 'react-router-dom';
 import { useUser } from '@clerk/clerk-react';
 import { addDailyScore } from '../utils/api';
 
-export function Trivia() {
-  const [count, setCount] = useState<number>(0);
-  const [correctAnswer, setCorrectAnswer] = useState<Boolean>(false);
-  const [wrongAnswer, setWrongAnswer] = useState<Boolean>(false);
-  const [isAnswered, setIsAnswered] = useState<boolean>(false);
-  const [questions, setQuestions] = useState<Question[]>([]);
-  const [currentScore, setCurrentScore] = useState<string>("0");
-  const [timeLeft, setTimeLeft] = useState<number>(10);
-  const [timeElasped, setTimeElapsed] = useState<number>(0);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
-  const { user } = useUser();
-  const navigate = useNavigate();
+// Create the form for a question
 
-  type Question = {
+export type Question = {
     question: string;
     answer: string;
     options: string[];
-  };
+};
+export function Trivia() {
+    const [count, setCount] = useState<number>(0);
+    const [correctAnswer, setCorrectAnswer] = useState<Boolean>(false);
+    const [wrongAnswer, setWrongAnswer] = useState<Boolean>(false);
+    const [isAnswered, setIsAnswered] = useState<boolean>(false);
+    const [questions, setQuestions] = useState<Question[]>([]);
+    const [currentScore, setCurrentScore] = useState<string>("0");
+    const [timeLeft, setTimeLeft] = useState<number>(10);
+    const [timeElasped, setTimeElapsed] = useState<number>(0);
+    const timerRef = useRef<NodeJS.Timeout | null>(null);
+    const [topic, setTopic] = useState<String>("")
+    const { user } = useUser();
+    const navigate = useNavigate();
+    
 
-    // Gets updated score from server based on elapsed time
+
+
+    // calculate the score from the backend base on the current score and time taken
+
     async function fetchScore() {
         try {
-          const response = await fetch(`http://localhost:3232/points?currentscore=${currentScore}&time=${timeElasped}`);
-          if (!response.ok) throw new Error("Failed to fetch score");
-          const data = await response.json();
-          if (data.result === "success") {
-            setCurrentScore(data.score);
-          }
+            const response = await fetch(`http://localhost:3232/points?currentscore=${currentScore}&time=${timeElasped}`);
+            if (!response.ok) {
+                throw new Error("Failed to fetch score");
+            }
+            const data = await response.json();
+            if (data.result == "success") {
+                const stringScore = data.score;
+                setCurrentScore(stringScore)
+            }
         } catch (error: any) {
-          console.log(error);
+            console.log(error);
         }
-      }
-    
-      // Loads trivia questions on first render
-      async function fetchQuestionInformation() {
+    }
+
+    // call backend to generate a random topic or get current daily topic 
+
+    async function fetchDailyTopic() {
         try {
-          const response = await fetch("http://localhost:3232/daily?elo=30&topic=NFL");
-          if (!response.ok) throw new Error("Failed to fetch question data");
-          const data = await response.json();
-          if (data.result === "success") {
-            setQuestions(data.questions);
-          }
+            const response = await fetch("http://localhost:3232/random");
+            if (!response.ok) {
+                throw new Error("Failed to fetch topic for today");
+            }
+            const data = await response.json();
+            if (data.result == "success") {
+                console.log(data.word);
+                return data.word;
+
+            }
         } catch (error: any) {
-          console.log(error);
+            console.log(error);
         }
-      }
+    }
     
-      function updateCount() {
+    
+
+    
+      
+
+
+    // generate 10 questions for trivia mode or grab 10 cached questions
+
+    async function fetchQuestionInformation() {
+        try {
+            const questionTopic = await fetchDailyTopic();
+            const response = await fetch(`http://localhost:3232/daily?topic=${questionTopic}`);
+            if (!response.ok) {
+                throw new Error("Failed to fetch question data");
+            }
+            const data = await response.json();
+            if (data.result === "success") {
+                setQuestions(data.questions);
+            }
+        } catch (error: any) {
+            console.log(error);
+        }
+    }
+
+    // increment the question number the user is on
+
+    function updateCount() {
         setCount((count) => count + 1);
-      }
-    
-      function returnToHome() {
+    }
+
+    // allow the user to navigate back to the home page
+
+    function returnToHome() {
         navigate("/dashboard");
-      }
-    
-      // Checks user's selected answer
-      function compareAnswer(choice: string) {
-        if (currentQuestion?.answer === choice) {
-          setCorrectAnswer(true);
-          return true;
+    }
+
+    // determine if the user selects the correct answer
+
+    function compareAnswer(choice: string) {
+        if (currentQuestion?.answer == choice) {
+            setCorrectAnswer(true);
+            return true;
         } else {
-          setWrongAnswer(true);
-          return false;
+            setWrongAnswer(true);
+            return false;
         }
-      }
-    
-      // On mount: fetch questions
-      useEffect(() => {
+    }
+
+
+    // fetch 10 questions
+
+    useEffect(() => {
+        console.log("topic: " + topic);
         fetchQuestionInformation();
-      }, []);
+    }, []);
+
+    // current question index
+
+    const currentQuestion = questions[count];
+
+
+
     
-      const currentQuestion = questions[count];
-    
-      // Timer logic: resets on each question
-      useEffect(() => {
-        setTimeLeft(10);
+    // build 10 second timer for question
+    useEffect(() => {
+        setTimeLeft(10); 
         setTimeElapsed(0);
+
+        
     
         timerRef.current = setInterval(() => {
-          if (!currentQuestion) return;
-    
-          setTimeLeft((prev) => {
-            if (prev <= 1) {
-              clearInterval(timerRef.current!);
-              setIsAnswered(true);
-              setWrongAnswer(true);
-              return 0;
-            }
-            return prev - 1;
-          });
-    
-          setTimeElapsed((prev) => prev + 1);
+            if (!currentQuestion) return;
+            
+            setTimeLeft((prev) => {
+                if (prev <= 1) {
+                    clearInterval(timerRef.current!);
+                    setIsAnswered(true);
+                    setWrongAnswer(true); 
+                    return 0;
+                } 
+            
+                return prev - 1;
+            });
+
+            setTimeElapsed((prev) => {
+                return prev + 1;
+            })
         }, 1000);
     
-        return () => clearInterval(timerRef.current!);
-      }, [currentQuestion]);
-    
-      function stopTimer() {
+        return () => clearInterval(timerRef.current!); 
+    }, [currentQuestion]);
+
+    // stop the timer when a user runs out of time or selects an answer
+
+    function stopTimer() {
         if (timerRef.current) {
-          clearInterval(timerRef.current);
-          timerRef.current = null;
+            clearInterval(timerRef.current);
+            timerRef.current = null;
         }
-      }
+    }
     
       // Keyboard shortcuts:
       // 'n' → Next question (after answering)
