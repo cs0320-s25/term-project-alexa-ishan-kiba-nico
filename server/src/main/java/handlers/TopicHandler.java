@@ -15,6 +15,10 @@ import spark.Response;
 import spark.Route;
 import storage.StorageInterface;
 
+/**
+ * Handles "/topic" endpoint; deals with tracking and updating the highest user streaks for each
+ * trivia category.
+ */
 public class TopicHandler implements Route {
 
   private final StorageInterface storageHandler;

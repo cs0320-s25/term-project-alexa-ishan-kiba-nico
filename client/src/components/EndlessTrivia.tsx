@@ -4,6 +4,10 @@ import { Question } from "./DailyTrivia";
 import { addTopicScore } from "../utils/api";
 import { useNavigate } from "react-router-dom";
 
+/**
+ * Contains structure for (and back end call to) endless triva gamemode. 
+ * Allows users to continuously answer questions on a chosen topic to build a streak until they get one wrong
+ */
 export function EndlessTrivia() {
   const [topic, setTopic] = useState<string>("");
   const [streak, setStreak] = useState<number>(0);

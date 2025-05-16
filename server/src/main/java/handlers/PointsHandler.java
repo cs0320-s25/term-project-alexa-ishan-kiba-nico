@@ -13,6 +13,10 @@ import spark.Response;
 import spark.Route;
 import storage.StorageInterface;
 
+/**
+ * Handles "/points" endpoint; calculates and returns a player's updated score based on their
+ * current score and time taken to answer a question
+ */
 public class PointsHandler implements Route {
 
   private final StorageInterface storage;

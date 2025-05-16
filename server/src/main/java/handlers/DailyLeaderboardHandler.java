@@ -15,6 +15,10 @@ import spark.Route;
 import storage.RankedUser;
 import storage.StorageInterface;
 
+/**
+ * Handles the "/dailyleaderboard" endpoint; handles HTTP requests to generate and return the daily
+ * leaderboard for a given username.
+ */
 public class DailyLeaderboardHandler implements Route {
 
   private final StorageInterface storageHandler;

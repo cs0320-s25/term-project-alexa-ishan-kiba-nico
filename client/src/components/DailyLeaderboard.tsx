@@ -8,7 +8,9 @@ interface LeaderboardEntry {
   username: string;
   elo: number;
 }
-
+/**
+ * Displays a ranked list of users based on their daily trivia performance
+ */
 export function DailyLeaderboard() {
   const [dailyLeaderboardData, setDailyLeaderboardData] = useState<LeaderboardEntry[]>([]);
   const { user } = useUser();

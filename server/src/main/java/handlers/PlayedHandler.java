@@ -11,6 +11,10 @@ import spark.Response;
 import spark.Route;
 import storage.StorageInterface;
 
+/**
+ * Handles "/played" endpoint; processes get/set requests for whether a user has played the daily
+ * trivia using their UID
+ */
 public class PlayedHandler implements Route {
 
   private final StorageInterface storageHandler;

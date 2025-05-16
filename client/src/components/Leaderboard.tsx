@@ -1,5 +1,8 @@
 import { Link, Outlet } from 'react-router-dom';
 
+/**
+ * Provides navigation to view both the daily and topic-based leaderboards
+ */
 export function Leaderboard() {
     
     return (
