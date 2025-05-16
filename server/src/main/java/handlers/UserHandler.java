@@ -13,6 +13,10 @@ import spark.Response;
 import spark.Route;
 import storage.StorageInterface;
 
+/**
+ * Handles "/user" endpoint; creates or updates a user with a daily reset of their gameplay state
+ * and ELO score
+ */
 public class UserHandler implements Route {
 
   private final StorageInterface storageHandler;

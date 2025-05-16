@@ -57,23 +57,23 @@ ChatGPT was used with the prompt "explain how an Elo system works, and suggest a
 - `ScoreHandler.java:` Handles "/score" endpoint; updates a user's score (Elo) in storage based on provided uid and score query parameters
 -` TopicHandler.java:` Handles "/topic" endpoint; deals with tracking and updating the highest user streaks for each trivia category.
 - `TopicLeaderboardHandler.java:` Handles "/topicleaderboard" endpoint; returns the top streak holder for each trivia category from stored leaderboard data.
-- `UserHandler.java:` Handles "/user" endpoing; creates or updates a user with a daily reset of their gameplay state and ELO score
+- `UserHandler.java:` Handles "/user" endpoint; creates or updates a user with a daily reset of their gameplay state and Elo score
 
-- `Ranker.java:` Ranks users by ELO for the current day and returns a leaderboard including the top 10 and the requesting user if outside the top 10
-- `User.java:` Class to hold user information including username, current ELO score, date of last activity, and whether they've played the daily game
-- `RankedUser.java:` Represents a user on the leaderboard with their rank, username, and ELO score
+- `Ranker.java:` Ranks users by Elo for the current day and returns a leaderboard including the top 10 and the requesting user if outside the top 10
+- `User.java:` Class to hold user information including username, current Elo score, date of last activity, and whether they've played the daily game
+- `RankedUser.java:` Represents a user on the leaderboard with their rank, username, and Elo 
 - `StorageInterface.java:`  Interacts with Firebase to provide methods to add, retrieve, and manage user data, category data, and daily trivia content
 
 
 ### Relationships Between Classes and Front/Back End
 
-- The `ScoreHandler` uses `StorageInterface` to update a user's ELO score based on query parameters.
+- The `ScoreHandler` uses `StorageInterface` to update a user's Elo based on query parameters.
 - The `TopicHandler` interacts with `StorageInterface` to update or initialize streak leader data for a specific category.
 - The `TopicLeaderboardHandler` accesses category data via `StorageInterface` to build and return a leaderboard.
-- The `UserHandler` reads and writes user data using `StorageInterface` to track usernames, ELOs, and daily activity.
-- The `Ranker` retrieves all users from `StorageInterface`, sorts them by ELO, and assigns ranks using the User and `RankedUser` classes.
-- The `RankedUser` class is used by `Ranker` to represent a user with an associated rank and ELO.
-- The `User` class encapsulates user-specific data such as name, ELO score, date, and whether they’ve played today.
+- The `UserHandler` reads and writes user data using `StorageInterface` to track usernames, Elos, and daily activity.
+- The `Ranker` retrieves all users from `StorageInterface`, sorts them by Elo, and assigns ranks using the User and `RankedUser` classes.
+- The `RankedUser` class is used by `Ranker` to represent a user with an associated rank and Elo.
+- The `User` class encapsulates user-specific data such as name, Elo score, date, and whether they’ve played today.
 - The `StorageInterface` serves as a shared abstraction that all handlers and the `Ranker` class rely on for data persistence and retrieval.
 - The front end sends HTTP requests with query parameters (e.g. uid, username, score) to specific backend routes handled by classes like `UserHandler`, `ScoreHandler`, and `TopicHandler`.
 - The back end handlers parse these parameters using Spark’s Request API and respond with JSON-encoded results using Moshi.
