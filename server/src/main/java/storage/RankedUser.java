@@ -21,8 +21,7 @@ public class RankedUser {
   }
 
   public String getUsername() {
-    String newUsername = username;
-    return newUsername; // defensive copy
+    return new String(username); // defensive copy
   }
 
   public int getElo() {
